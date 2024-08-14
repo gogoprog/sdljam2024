@@ -3,8 +3,8 @@
 #include <algorithm>
 
 Level::Level() {
-    tilewidth = 32;
-    tileheight = 32;
+    tilewidth = 256;
+    tileheight = 256;
 
     width = tilewidth * tileSpacing;
     height = tileheight * tileSpacing;

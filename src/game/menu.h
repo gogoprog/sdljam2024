@@ -30,11 +30,15 @@ class MenuSystem : public System {
         if (inputs.isKeyJustPressed(SDL_SCANCODE_RETURN)) {
             Context::get().game.changeState(Game::State::PLAYING);
         }
+
     }
 
     void updateSingle(const float dt, Entity &entity) override {
+        time += dt;
+
+        entity.position = Vector2(std::sin(time) * 200, std::cos(time) * 200);
     }
 
   private:
-    float timeLeft;
+    float time{0};
 };
