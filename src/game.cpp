@@ -10,8 +10,9 @@
 #include "game/sprite.h"
 #include "game/state.h"
 #include "game/turret.h"
-#include "game/ui.h"
+#include "game/hud.h"
 #include "game/vehicle.h"
+#include "game/menu.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -31,7 +32,6 @@ void Game::init() {
     engine.enableSystem<ShakeSystem>();
     engine.enableSystem<SpriteRotaterSystem>();
     engine.enableSystem<SpriteRendererSystem>();
-    engine.enableSystem<UiSystem>();
 
     {
         auto e = Factory::createCamera();
@@ -115,37 +115,17 @@ void Game::changeState(const State state) {
 
     switch (state) {
         case State::INITIATING: {
-            changeState(State::BUILDING_ROADS);
+            changeState(State::MENU);
         } break;
 
-        case State::BUILDING_ROADS: {
-            engine.disableSystem<WinningStateSystem>();
-            engine.disableSystem<BuildingTurretsStateSystem>();
-            engine.enableSystem<RoadBuildingStateSystem>();
-        } break;
-
-        case State::BUILDING_TURRETS: {
-            engine.disableSystem<RoadBuildingStateSystem>();
-            engine.enableSystem<BuildingTurretsStateSystem>();
+        case State::MENU: {
+            engine.enableSystem<MenuSystem>();
+            engine.disableSystem<HudSystem>();
         } break;
 
         case State::PLAYING: {
-            engine.disableSystem<RoadBuildingStateSystem>();
-            engine.disableSystem<BuildingTurretsStateSystem>();
-            engine.enableSystem<SpawnSystem>();
-            engine.enableSystem<FiringStateSystem>();
-        } break;
-
-        case State::WINNING: {
-            engine.disableSystem<SpawnSystem>();
-            engine.disableSystem<FiringStateSystem>();
-            engine.enableSystem<WinningStateSystem>();
-        } break;
-
-        case State::LOSING: {
-            engine.disableSystem<SpawnSystem>();
-            engine.disableSystem<FiringStateSystem>();
-            engine.enableSystem<LosingStateSystem>();
+            engine.disableSystem<MenuSystem>();
+            engine.enableSystem<HudSystem>();
         } break;
     }
 }

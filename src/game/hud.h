@@ -3,9 +3,9 @@
 #include "../context.h"
 #include "spawn.h"
 
-class UiSystem : public System {
+class HudSystem : public System {
   public:
-    UiSystem() {
+    HudSystem() {
         priority = 10;
     }
 

@@ -17,6 +17,7 @@ class Game {
   public:
     enum class State {
         INITIATING,
+        MENU,
         BUILDING_ROADS,
         BUILDING_TURRETS,
         PLAYING,

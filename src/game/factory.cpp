@@ -8,7 +8,6 @@
 #include "spawn.h"
 #include "sprite.h"
 #include "turret.h"
-#include "ui.h"
 #include "vehicle.h"
 
 const Array<int, 8> turret_frames = {2, 3, 5, 6, 7, 8, 9, 4};
