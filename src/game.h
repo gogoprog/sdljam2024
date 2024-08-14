@@ -37,8 +37,4 @@ class Game {
     int waveCount{0};
 
     int turretCost{250};
-
-  private:
-    class Pimpl;
-    std::unique_ptr<Pimpl> pimpl;
 };

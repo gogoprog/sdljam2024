@@ -13,36 +13,25 @@
 #include "game/ui.h"
 #include "game/vehicle.h"
 
-struct Game::Pimpl {
-    FiringStateSystem firingStateSystem;
-    RoadBuildingStateSystem roadBuildingStateSystem;
-    BuildingTurretsStateSystem buildingTurretsStateSystem;
-    SpawnSystem spawnSystem;
-    WinningStateSystem winningStateSystem;
-    LosingStateSystem losingStateSystem;
-};
-
-Game::Game() : pimpl(new Game::Pimpl()) {
-}
-
+Game::Game() = default;
 Game::~Game() = default;
 
 void Game::init() {
     auto &engine = Context::get().engine;
     auto &level = Context::get().level;
 
-    engine.addSystem(new TurretSystem());
-    engine.addSystem(new VehicleSystem());
-    engine.addSystem(new BulletSystem());
-    engine.addSystem(new LifeSystem());
-    engine.addSystem(new MoveSystem());
-    engine.addSystem(new CameraSystem());
-    engine.addSystem(new ControlSystem());
-    engine.addSystem(new AnimationSystem());
-    engine.addSystem(new ShakeSystem());
-    engine.addSystem(new SpriteRotaterSystem());
-    engine.addSystem(new SpriteRendererSystem());
-    engine.addSystem(new UiSystem());
+    engine.enableSystem<TurretSystem>();
+    engine.enableSystem<VehicleSystem>();
+    engine.enableSystem<BulletSystem>();
+    engine.enableSystem<LifeSystem>();
+    engine.enableSystem<MoveSystem>();
+    engine.enableSystem<CameraSystem>();
+    engine.enableSystem<ControlSystem>();
+    engine.enableSystem<AnimationSystem>();
+    engine.enableSystem<ShakeSystem>();
+    engine.enableSystem<SpriteRotaterSystem>();
+    engine.enableSystem<SpriteRendererSystem>();
+    engine.enableSystem<UiSystem>();
 
     {
         auto e = Factory::createCamera();
@@ -130,33 +119,33 @@ void Game::changeState(const State state) {
         } break;
 
         case State::BUILDING_ROADS: {
-            engine.removeSystem(&pimpl->winningStateSystem);
-            engine.removeSystem(&pimpl->buildingTurretsStateSystem);
-            engine.addSystem(&pimpl->roadBuildingStateSystem);
+            engine.disableSystem<WinningStateSystem>();
+            engine.disableSystem<BuildingTurretsStateSystem>();
+            engine.enableSystem<RoadBuildingStateSystem>();
         } break;
 
         case State::BUILDING_TURRETS: {
-            engine.removeSystem(&pimpl->roadBuildingStateSystem);
-            engine.addSystem(&pimpl->buildingTurretsStateSystem);
+            engine.disableSystem<RoadBuildingStateSystem>();
+            engine.enableSystem<BuildingTurretsStateSystem>();
         } break;
 
         case State::PLAYING: {
-            engine.removeSystem(&pimpl->roadBuildingStateSystem);
-            engine.removeSystem(&pimpl->buildingTurretsStateSystem);
-            engine.addSystem(&pimpl->spawnSystem);
-            engine.addSystem(&pimpl->firingStateSystem);
+            engine.disableSystem<RoadBuildingStateSystem>();
+            engine.disableSystem<BuildingTurretsStateSystem>();
+            engine.enableSystem<SpawnSystem>();
+            engine.enableSystem<FiringStateSystem>();
         } break;
 
         case State::WINNING: {
-            engine.removeSystem(&pimpl->spawnSystem);
-            engine.removeSystem(&pimpl->firingStateSystem);
-            engine.addSystem(&pimpl->winningStateSystem);
+            engine.disableSystem<SpawnSystem>();
+            engine.disableSystem<FiringStateSystem>();
+            engine.enableSystem<WinningStateSystem>();
         } break;
 
         case State::LOSING: {
-            engine.removeSystem(&pimpl->spawnSystem);
-            engine.removeSystem(&pimpl->firingStateSystem);
-            engine.addSystem(&pimpl->losingStateSystem);
+            engine.disableSystem<SpawnSystem>();
+            engine.disableSystem<FiringStateSystem>();
+            engine.enableSystem<LosingStateSystem>();
         } break;
     }
 }

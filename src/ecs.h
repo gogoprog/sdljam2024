@@ -73,23 +73,36 @@ class Engine {
     friend class System;
 
   public:
-    void addSystem(System *system) {
-        auto it = std::find(systems.begin(), systems.end(), system);
-        if (it == systems.end()) {
-            systems.push_back(system);
-
-            std::sort(systems.begin(), systems.end(), [&](auto a, auto b) { return a->priority < b->priority; });
-            system->engine = this;
-            system->onAdded();
+    template <typename T> void enableSystem() {
+        System *value = nullptr;
+        for (auto system : allSystems) {
+            if (typeid(*system) == typeid(T)) {
+                value = system;
+            }
         }
+
+        if (value == nullptr) {
+            value = new T;
+            allSystems.push_back(value);
+        }
+
+        addSystem(value);
     }
 
-    void removeSystem(System *system) {
-        auto it = std::find(systems.begin(), systems.end(), system);
-        if (it != systems.end()) {
-            systems.erase(std::find(systems.begin(), systems.end(), system));
-            system->onRemoved();
+    template <typename T> void disableSystem() {
+        System *value = nullptr;
+        for (auto system : allSystems) {
+            if (typeid(*system) == typeid(T)) {
+                value = system;
+            }
         }
+
+        if (value == nullptr) {
+            value = new T;
+            allSystems.push_back(value);
+        }
+
+        removeSystem(value);
     }
 
     void addEntity(SharedPtr<Entity> entity) {
@@ -151,7 +164,27 @@ class Engine {
     }
 
   private:
+    void addSystem(System *system) {
+        auto it = std::find(systems.begin(), systems.end(), system);
+        if (it == systems.end()) {
+            systems.push_back(system);
+
+            std::sort(systems.begin(), systems.end(), [&](auto a, auto b) { return a->priority < b->priority; });
+            system->engine = this;
+            system->onAdded();
+        }
+    }
+
+    void removeSystem(System *system) {
+        auto it = std::find(systems.begin(), systems.end(), system);
+        if (it != systems.end()) {
+            systems.erase(std::find(systems.begin(), systems.end(), system));
+            system->onRemoved();
+        }
+    }
+
     std::vector<System *> systems;
+    std::vector<System *> allSystems;
     std::vector<SharedPtr<Entity>> entities;
 };
 
