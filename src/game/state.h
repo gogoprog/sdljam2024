@@ -72,7 +72,7 @@ class RoadBuildingStateSystem : public System {
         auto tile_coords = level.getTileCoords(world_position);
         auto position = level.getTilePosition(tile_coords);
 
-        auto &terrain = renderer.getTerrain("StoneSnow");
+        auto &terrain = renderer.getTerrain("Snd2Watr");
 
         if (!inputs.isKeyPressed(SDL_SCANCODE_LSHIFT)) {
             if (inputs.isMousePressed(1)) {

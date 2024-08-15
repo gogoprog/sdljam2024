@@ -47,7 +47,7 @@ void loop() {
         }
     }
 
-    level.render(renderer);
+    level.render(current_ticks, renderer);
     engine.update(delta_time);
 
     /* viewer("Flag"); */

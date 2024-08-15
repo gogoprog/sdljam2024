@@ -12,7 +12,6 @@ Level::Level() {
     buildCache();
 
     beginCoords = {10, 32};
-    /* beginCoords = {20, 20}; // if you read this I want to tell you this line is for debug purpose only */
     endCoords = {20, -1};
 
     setLockedRoad(beginCoords);
@@ -21,13 +20,24 @@ Level::Level() {
     setLockedRoad({endCoords.x, endCoords.y + 1});
 }
 
-void Level::render(Renderer &renderer) {
-    auto &terrain = renderer.getTerrain("StoneSnow");
+void Level::render(uint32_t ticks, Renderer &renderer) {
+    auto &terrain = renderer.getTerrain("Snd2Watr");
 
     int i = 0;
     for (int y = 0; y < tileheight; ++y) {
         for (int x = 0; x < tilewidth; ++x) {
-            renderer.draw({x * tileSpacing, y * tileSpacing}, terrain, cachedTypes[i]);
+            if(cachedTypes[i] != Tile::FILL)
+            {
+                renderer.draw({x * tileSpacing, y * tileSpacing}, terrain, cachedTypes[i]);
+            }
+            else
+            {
+                static const int tiles[] = { Tile::FILL, Tile::FILL1 };
+                int r = (x + y + ticks / 500) % 2;
+
+                renderer.draw({x * tileSpacing, y * tileSpacing}, terrain, tiles[r]);
+
+            }
             ++i;
         }
     }
@@ -119,10 +129,10 @@ void Level::updateCache(const Vector2 &from, const Vector2 &to) {
     for (int x = minx; x <= maxx; ++x) {
         for (int y = miny; y <= maxy; ++y) {
             Vector2 pos{x, y};
-            int type = Tile::FILL2;
+            int type = Tile::FILL;
 
             if (getRoad(pos)) {
-                type = Tile::FILL1;
+                type = Tile::FILL2;
             } else {
 
                 if (getRoad({x + 1, y + 1})) {

@@ -18,7 +18,6 @@ class MenuSystem : public System {
         auto &level = Context::get().level;
         auto &renderer = Context::get().renderer;
         auto world_position = Context::get().getMouseWorldPosition();
-        auto &terrain = renderer.getTerrain("StoneSnow");
 
         renderer.drawCenteredText(80, "island war", 5);
         renderer.drawCenteredText(200, "a sdl2 based rts game", 1);
