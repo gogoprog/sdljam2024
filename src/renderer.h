@@ -73,9 +73,9 @@ class Renderer {
     void draw(const Vector2 &pos, const std::string &name);
 
     void drawText(const Vector2 &pos, const std::string &text, const float scale = 1.0f, const bool background = true,
-                  const bool use_camera = false);
+                  const bool use_camera = false, const float alpha = 1.0f);
 
-    void drawCenteredText(const int y, const std::string &text, const float scale = 1.0f, const bool background = true);
+    void drawCenteredText(const int y, const std::string &text, const float scale = 1.0f, const bool background = true, const float alpha = 1.0f);
 
     void drawFilledQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b);
     void drawQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b);

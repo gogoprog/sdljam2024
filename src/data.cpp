@@ -34,10 +34,10 @@ void loadData(Renderer &renderer, Audio &audio) {
     renderer.loadAtlas("explosn", false, 7, false, true, 20);
     renderer.loadAtlas("Flag", 20, 20, 5);
 
-    /* renderer.loadTerrain("StoneSnow"); */
-    /* renderer.loadTerrain("SnowPink"); */
+
+    renderer.loadAtlas("Generator");
+
     renderer.loadTerrain("Snd2Watr");
-    renderer.loadTerrain("Water2");
 
     renderer.loadTexture("Panel", false);
     renderer.loadTexture("Cursor1");

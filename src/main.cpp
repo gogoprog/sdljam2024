@@ -50,7 +50,30 @@ void loop() {
     level.render(current_ticks, renderer);
     engine.update(delta_time);
 
-    /* viewer("Flag"); */
+    auto viewer = [&](const char *atlasname) {
+        static int frame = 0;
+        frame %= renderer.getFramesCount(atlasname);
+        renderer.draw({0, 0}, atlasname, frame, false);
+        renderer.draw({256, 256}, atlasname, frame);
+
+        if (inputs.isKeyJustPressed(SDL_SCANCODE_LEFT)) {
+            frame--;
+            if (frame < 0)
+                frame = renderer.getFramesCount(atlasname) - 1;
+        }
+        if (inputs.isKeyJustPressed(SDL_SCANCODE_RIGHT)) {
+            frame++;
+        }
+        if (inputs.isMouseJustPressed(1)) {
+            auto pos = inputs.getMousePosition();
+            renderer.setPivot(atlasname, frame, pos);
+        }
+        if (inputs.isKeyJustPressed(SDL_SCANCODE_SPACE)) {
+            renderer.exportAtlas(atlasname);
+        }
+    };
+
+    viewer("Generator");
 
     renderer.update();
 
@@ -75,28 +98,6 @@ int main(int arc, char **argv) {
 
     loadData(renderer, audio);
 
-    auto viewer = [&](const char *atlasname) {
-        static int frame = 0;
-        frame %= renderer.getFramesCount(atlasname);
-        renderer.draw({0, 0}, atlasname, frame, false);
-        renderer.draw({256, 256}, atlasname, frame);
-
-        if (inputs.isKeyJustPressed(SDL_SCANCODE_LEFT)) {
-            frame--;
-            if (frame < 0)
-                frame = renderer.getFramesCount(atlasname) - 1;
-        }
-        if (inputs.isKeyJustPressed(SDL_SCANCODE_RIGHT)) {
-            frame++;
-        }
-        if (inputs.isMouseJustPressed(1)) {
-            auto pos = inputs.getMousePosition();
-            renderer.setPivot(atlasname, frame, pos);
-        }
-        if (inputs.isKeyJustPressed(SDL_SCANCODE_SPACE)) {
-            renderer.exportAtlas(atlasname);
-        }
-    };
 
     game.init();
 

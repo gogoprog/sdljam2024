@@ -454,7 +454,7 @@ void Renderer::draw(const Vector2 &pos, const std::string &name) {
 }
 
 void Renderer::drawText(const Vector2 &pos, const std::string &text, const float scale, const bool background,
-                        const bool use_camera) {
+                        const bool use_camera, const float alpha ) {
     auto &atlas = pimpl->atlases["Font"];
     auto current_pos = pos;
 
@@ -478,6 +478,8 @@ void Renderer::drawText(const Vector2 &pos, const std::string &text, const float
         current_pos = pos;
     }
 
+    SDL_SetTextureAlphaMod(atlas.texture, int(alpha * 255));
+
     for (auto c : text) {
         int frame_index = pimpl->getTextFrameIndex(c);
 
@@ -493,13 +495,13 @@ void Renderer::drawText(const Vector2 &pos, const std::string &text, const float
     }
 }
 
-void Renderer::drawCenteredText(const int y, const std::string &text, const float scale, const bool background) {
+void Renderer::drawCenteredText(const int y, const std::string &text, const float scale, const bool background, const float alpha) {
     float text_width = pimpl->getTextWidth(text, scale);
     float center = width / 2;
     Vector2 pos;
     pos.x = center - text_width / 2;
     pos.y = y;
-    drawText(pos, text, scale, background, false);
+    drawText(pos, text, scale, background, false, alpha);
 }
 
 void Renderer::drawFilledQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b) {
