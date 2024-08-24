@@ -3,14 +3,12 @@
 #include "../context.h"
 
 struct Sprite : public Component {
-    inline static String name = "Sprite";
     String atlasName;
     int frameIndex{0};
     int layer = 0;
 };
 
 struct RotatableSprite : public Component {
-    inline static String name = "RotatableSprite";
     float angle;
     Vector<int> frames;
     int frameOffset{0};

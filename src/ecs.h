@@ -3,6 +3,7 @@
 #include "types.h"
 #include <algorithm>
 #include <functional>
+#include <cassert>
 
 struct Component {};
 
@@ -18,30 +19,32 @@ class Entity {
     Vector2 position;
 
     template <typename T, typename... Args> T &add(Args... args) {
-        components[T::name] = std::make_unique<T>(args...);
+        assert(!has<T>());
 
-        notifyAdd(T::name);
+        components[typeid(T)] = std::make_unique<T>(args...);
 
-        return (T &)*components[T::name];
+        notifyAdd(typeid(T));
+
+        return (T &)*components[typeid(T)];
     }
 
     template <typename T> T &get() {
-        return (T &)*components[T::name];
+        return (T &)*components[typeid(T)];
     }
 
     template <typename T> void remove() {
-        components.erase(T::name);
+        components.erase(typeid(T));
     }
 
     template <typename T> bool has() {
-        return components.find(T::name) != components.end();
+        return components.find(typeid(T)) != components.end();
     }
 
-    void notifyAdd(const String component_name);
-    void notifyRemove(const String component_name);
+    void notifyAdd(const TypeIndex component_name);
+    void notifyRemove(const TypeIndex component_name);
 
   private:
-    Map<String, UniquePtr<Component>> components;
+    Map<TypeIndex, UniquePtr<Component>> components;
     Engine *engine{nullptr};
 };
 
@@ -60,11 +63,11 @@ class System {
     virtual void updateSingle(const float dt, Entity &entity){};
 
     template <typename T> void require() {
-        componentsNames.push_back(T::name);
+        requiredComponents.push_back(typeid(T));
     }
 
   protected:
-    Vector<String> componentsNames;
+    Vector<TypeIndex> requiredComponents;
     Engine *engine{nullptr};
     int priority{0};
 };
@@ -126,12 +129,12 @@ class Engine {
         }
     }
 
-    void notifyAdd(Entity &entity, const String component_name) {
+    void notifyAdd(Entity &entity, const TypeIndex component_name) {
         for (auto &system : systems) {
-            if (std::find(system->componentsNames.begin(), system->componentsNames.end(), component_name) !=
-                system->componentsNames.end()) {
+            if (std::find(system->requiredComponents.begin(), system->requiredComponents.end(), component_name) !=
+                system->requiredComponents.end()) {
 
-                if (std::all_of(system->componentsNames.begin(), system->componentsNames.end(), [&](auto name) {
+                if (std::all_of(system->requiredComponents.begin(), system->requiredComponents.end(), [&](auto name) {
                         auto it = std::find_if(entity.components.begin(), entity.components.end(),
                                                [&](auto &kv) { return kv.first == name; });
                         return it != entity.components.end();
@@ -188,7 +191,7 @@ class Engine {
     std::vector<SharedPtr<Entity>> entities;
 };
 
-inline void Entity::notifyAdd(const String component_name) {
+inline void Entity::notifyAdd(const TypeIndex component_name) {
     if (engine) {
         engine->notifyAdd(*this, component_name);
     }
@@ -198,7 +201,7 @@ inline void System::update(const float dt) {
     auto entities = engine->entities;
     for (auto &entityptr : entities) {
         auto &entity = *entityptr;
-        if (std::all_of(componentsNames.begin(), componentsNames.end(), [&](auto name) {
+        if (std::all_of(requiredComponents.begin(), requiredComponents.end(), [&](auto name) {
                 auto it = std::find_if(entity.components.begin(), entity.components.end(),
                                        [&](auto &kv) { return kv.first == name; });
                 return it != entity.components.end();

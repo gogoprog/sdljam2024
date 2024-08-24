@@ -5,7 +5,6 @@
 #include "sprite.h"
 
 struct Animation : public Component {
-    inline static String name = "Animation";
     float frameRate;
     float time{0};
     bool loop{false};

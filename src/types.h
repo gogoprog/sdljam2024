@@ -3,10 +3,12 @@
 #include <array>
 #include <cmath>
 #include <map>
+#include <unordered_map>
 #include <memory>
-/* #include <span> */
 #include <string>
 #include <vector>
+#include <typeindex>
+#include <typeinfo>
 
 using String = std::string;
 template <typename T> using Vector = std::vector<T>;
@@ -15,6 +17,9 @@ template <typename T, int size> using Array = std::array<T, size>;
 template <typename T> using UniquePtr = std::unique_ptr<T>;
 template <typename T> using SharedPtr = std::shared_ptr<T>;
 template <typename K, typename V> using Map = std::map<K, V>;
+template <typename K, typename V> using UnorderedMap = std::unordered_map<K, V>;
+
+using TypeIndex = std::type_index;
 
 #if __has_include(<numbers>)
 #include <numbers>

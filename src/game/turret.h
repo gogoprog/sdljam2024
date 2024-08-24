@@ -14,7 +14,6 @@ struct TurretStat {
 extern Array<TurretStat, 10> turretStats;
 
 struct Turret : public Component {
-    inline static String name = "Turret";
     float timeSinceLastFire{100};
     bool mustFire{false};
     int level{0};

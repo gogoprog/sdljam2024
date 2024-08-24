@@ -4,13 +4,11 @@
 #include "vehicle.h"
 
 struct Control : public Component {
-    inline static String name = "Control";
     Vector2 startPosition;
     Vector2 startMousePosition;
 };
 
 struct Selectable : public Component {
-    inline static String name = "Selectable";
     Vector2 startPosition;
     Vector2 startMousePosition;
 };

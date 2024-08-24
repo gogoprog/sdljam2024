@@ -5,8 +5,6 @@
 #include "sprite.h"
 
 struct Shake : public Component {
-    inline static String name = "Shake";
-
     float duration = 0.4f;
     float intensity = 0.3f;
 

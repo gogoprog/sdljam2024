@@ -6,12 +6,9 @@
 #include "sprite.h"
 
 struct Movable : public Component {
-    inline static String name = "Movable";
 };
 
 struct Move : public Component {
-    inline static String name = "Move";
-
     Move(Vector2 f, Vector2 t, float s) : from(f), to(t), speed(s) {
     }
 

@@ -6,7 +6,6 @@
 #include "life.h"
 
 struct Bullet : public Component {
-    inline static String name = "Bullet";
     Vector2 velocity;
     float lifetimeLeft{0};
     int damage;

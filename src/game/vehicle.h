@@ -4,7 +4,6 @@
 #include "move.h"
 
 struct Vehicle : public Component {
-    inline static String name = "Vehicle";
     Path path;
     float speed = 100;
     Vector2 target;

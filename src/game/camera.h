@@ -4,7 +4,6 @@
 #include "shake.h"
 
 struct Camera : public Component {
-    inline static String name = "Camera";
 };
 
 class CameraSystem : public System {
