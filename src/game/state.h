@@ -7,8 +7,8 @@
 class FiringStateSystem : public System {
   public:
     FiringStateSystem() {
-        componentsNames.push_back("Turret");
-        componentsNames.push_back("RotatableSprite");
+        require<Turret>();
+        require<RotatableSprite>();
     }
 
     void onAdded() override {

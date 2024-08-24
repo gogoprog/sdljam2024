@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../context.h"
+#include "vehicle.h"
 
 struct Control : public Component {
     inline static String name = "Control";
@@ -8,10 +9,16 @@ struct Control : public Component {
     Vector2 startMousePosition;
 };
 
+struct Selectable : public Component {
+    inline static String name = "Selectable";
+    Vector2 startPosition;
+    Vector2 startMousePosition;
+};
+
 class ControlSystem : public System {
   public:
     ControlSystem() {
-        componentsNames.push_back("Control");
+        require<Control>();
     }
 
     void updateSingle(const float dt, Entity &entity) override {
@@ -43,5 +50,24 @@ class ControlSystem : public System {
             auto delta = mouse_pos - control.startMousePosition;
             entity.position = control.startPosition - delta;
         }
+    }
+};
+
+
+class VehicleSelectSystem : public System {
+  public:
+    VehicleSelectSystem() {
+        require<Vehicle>();
+        require<Selectable>();
+    }
+
+    void onEntityAdded(Entity &entity) override {
+    }
+
+    void updateSingle(const float dt, Entity &entity) override {
+        auto &level = Context::get().level;
+        auto &game = Context::get().game;
+        auto &vehicle = entity.get<Vehicle>();
+
     }
 };

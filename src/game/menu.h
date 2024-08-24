@@ -5,7 +5,7 @@
 class MenuSystem : public System {
   public:
     MenuSystem() {
-        componentsNames.push_back("Control");
+        require<Control>();
     }
 
     void onAdded() override {

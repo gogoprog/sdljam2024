@@ -13,8 +13,8 @@ struct Vehicle : public Component {
 class VehicleSystem : public System {
   public:
     VehicleSystem() {
-        componentsNames.push_back("Vehicle");
-        componentsNames.push_back("Movable");
+        require<Vehicle>();
+        require<Movable>();
     }
 
     void onEntityAdded(Entity &entity) override {
@@ -35,7 +35,6 @@ class VehicleSystem : public System {
             auto start_coords = level.getTileCoords(entity.position);
 
             if (start_coords == vehicle.target) {
-                game.stats.lifes--;
 
                 Context::get().audio.playSound("error");
                 if (game.stats.lifes == 0) {
@@ -51,8 +50,8 @@ class VehicleSystem : public System {
                     } else if (vehicle.path.size() == 0) {
                     }
                 } else {
-                    auto position = level.getTileCenterPosition(start_coords + directions[rand() % 8]);
-                    entity.add<Move>(entity.position, position, vehicle.speed);
+                    /* auto position = level.getTileCenterPosition(start_coords + directions[rand() % 8]); */
+                    /* entity.add<Move>(entity.position, position, vehicle.speed); */
                 }
             }
         }

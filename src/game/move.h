@@ -25,8 +25,8 @@ struct Move : public Component {
 class MoveSystem : public System {
   public:
     MoveSystem() {
-        componentsNames.push_back("Move");
-        componentsNames.push_back("RotatableSprite");
+        require<Move>();
+        require<RotatableSprite>();
     }
 
     void onEntityAdded(Entity &entity) override {

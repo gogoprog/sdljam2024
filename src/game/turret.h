@@ -23,8 +23,8 @@ struct Turret : public Component {
 class TurretSystem : public System {
   public:
     TurretSystem() {
-        componentsNames.push_back("Turret");
-        componentsNames.push_back("RotatableSprite");
+        require<Turret>();
+        require<RotatableSprite>();
     }
 
     void onEntityAdded(Entity &entity) override {

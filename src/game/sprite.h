@@ -19,7 +19,7 @@ struct RotatableSprite : public Component {
 class SpriteRendererSystem : public System {
   public:
     SpriteRendererSystem() {
-        componentsNames.push_back("Sprite");
+        require<Sprite>();
     }
 
     void update(const float dt) override {
@@ -51,8 +51,8 @@ class SpriteRendererSystem : public System {
 class SpriteRotaterSystem : public System {
   public:
     SpriteRotaterSystem() {
-        componentsNames.push_back("Sprite");
-        componentsNames.push_back("RotatableSprite");
+        require<Sprite>();
+        require<RotatableSprite>();
     }
 
     void updateSingle(const float dt, Entity &entity) override {

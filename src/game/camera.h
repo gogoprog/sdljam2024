@@ -10,7 +10,7 @@ struct Camera : public Component {
 class CameraSystem : public System {
   public:
     CameraSystem() {
-        componentsNames.push_back("Camera");
+        require<Camera>();
     }
 
     void updateSingle(const float dt, Entity &entity) override {

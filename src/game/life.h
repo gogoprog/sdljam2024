@@ -15,7 +15,7 @@ struct Life : public Component {
 class LifeSystem : public System {
   public:
     LifeSystem() {
-        componentsNames.push_back("Life");
+        require<Life>();
     }
 
     void updateSingle(const float dt, Entity &entity) override {

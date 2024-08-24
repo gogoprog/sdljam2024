@@ -15,7 +15,7 @@ struct Bullet : public Component {
 class BulletSystem : public System {
   public:
     BulletSystem() {
-        componentsNames.push_back("Bullet");
+        require<Bullet>();
     }
 
     void updateSingle(const float dt, Entity &entity) override {

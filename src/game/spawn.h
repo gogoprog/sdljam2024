@@ -18,7 +18,7 @@ struct Spawn : public Component {
 class SpawnSystem : public System {
   public:
     SpawnSystem() {
-        componentsNames.push_back("Spawn");
+        require<Spawn>();
     }
 
     void updateSingle(const float dt, Entity &entity) override {
