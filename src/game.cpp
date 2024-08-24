@@ -4,15 +4,17 @@
 #include "game/animation.h"
 #include "game/camera.h"
 #include "game/control.h"
+#include "game/editor.h"
 #include "game/factory.h"
+#include "game/hud.h"
+#include "game/menu.h"
+#include "game/playing.h"
 #include "game/shake.h"
 #include "game/spawn.h"
 #include "game/sprite.h"
 #include "game/state.h"
 #include "game/turret.h"
-#include "game/hud.h"
 #include "game/vehicle.h"
-#include "game/menu.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -38,41 +40,14 @@ void Game::init() {
         engine.addEntity(e);
         Context::get().cameraEntity = e;
     }
-    {
-        auto e = Factory::createSpawn();
-        e->position = level.getTileCenterPosition(level.beginCoords);
-        engine.addEntity(e);
-    }
-    {
+
+    for (auto &coord : level.startCoords) {
         auto e = Factory::createFlag();
-        e->position = level.getTileCenterPosition(level.endCoords);
-        e->position.x -= 108;
-        e->position.y += 40;
-        engine.addEntity(e);
-    }
-    {
-        auto e = Factory::createFlag();
-        e->position = level.getTileCenterPosition(level.endCoords);
-        e->position.x += 98;
-        e->position.y += 40;
-        engine.addEntity(e);
-    }
-    {
-        auto e = Factory::createFlag();
-        e->position = level.getTileCenterPosition(level.beginCoords);
-        e->position.x += 98;
-        e->position.y -= 40;
-        engine.addEntity(e);
-    }
-    {
-        auto e = Factory::createFlag();
-        e->position = level.getTileCenterPosition(level.beginCoords);
-        e->position.x -= 108;
-        e->position.y -= 40;
+        e->position = level.getTileCenterPosition(coord);
         engine.addEntity(e);
     }
 
-    if (0)
+    if (1)
         for (int i = 0; i < 10; ++i) {
             Vector2 pos = {rand() % 2048, rand() % 2048};
 
@@ -121,11 +96,18 @@ void Game::changeState(const State state) {
         case State::MENU: {
             engine.enableSystem<MenuSystem>();
             engine.disableSystem<HudSystem>();
+            engine.disableSystem<PlayingSystem>();
         } break;
 
         case State::PLAYING: {
             engine.disableSystem<MenuSystem>();
             engine.enableSystem<HudSystem>();
+            engine.enableSystem<PlayingSystem>();
+        } break;
+
+        case State::EDITOR: {
+            engine.disableSystem<MenuSystem>();
+            engine.enableSystem<EditorSystem>();
         } break;
     }
 }

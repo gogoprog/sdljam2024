@@ -7,6 +7,7 @@ struct Vehicle : public Component {
     inline static String name = "Vehicle";
     Path path;
     float speed = 100;
+    Vector2 target;
 };
 
 class VehicleSystem : public System {
@@ -18,6 +19,8 @@ class VehicleSystem : public System {
 
     void onEntityAdded(Entity &entity) override {
         /* auto &move = entity.add<Move>(entity.position, Vector2{350, 256}, 100); */
+        auto &vehicle = entity.get<Vehicle>();
+        vehicle.target = entity.position;
     }
 
     void updateSingle(const float dt, Entity &entity) override {
@@ -31,7 +34,7 @@ class VehicleSystem : public System {
 
             auto start_coords = level.getTileCoords(entity.position);
 
-            if (start_coords == level.endCoords) {
+            if (start_coords == vehicle.target) {
                 game.stats.lifes--;
 
                 Context::get().audio.playSound("error");
@@ -41,7 +44,7 @@ class VehicleSystem : public System {
 
                 engine->removeEntity(entity);
             } else {
-                if (level.findPath(vehicle.path, start_coords, level.endCoords)) {
+                if (level.findPath(vehicle.path, start_coords, vehicle.target)) {
                     if (vehicle.path.size() > 1) {
                         auto position = level.getTileCenterPosition(vehicle.path[1]);
                         entity.add<Move>(entity.position, position, vehicle.speed);

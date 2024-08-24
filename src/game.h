@@ -18,8 +18,7 @@ class Game {
     enum class State {
         INITIATING,
         MENU,
-        BUILDING_ROADS,
-        BUILDING_TURRETS,
+        EDITOR,
         PLAYING,
         WINNING,
         LOSING,

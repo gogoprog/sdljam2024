@@ -30,6 +30,9 @@ class MenuSystem : public System {
             Context::get().game.changeState(Game::State::PLAYING);
         }
 
+        if (inputs.isKeyJustPressed(SDL_SCANCODE_E)) {
+            Context::get().game.changeState(Game::State::EDITOR);
+        }
     }
 
     void updateSingle(const float dt, Entity &entity) override {

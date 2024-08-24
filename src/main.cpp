@@ -73,13 +73,9 @@ void loop() {
         }
     };
 
-    viewer("Generator");
+    /* viewer("Generator"); */
 
     renderer.update();
-
-    if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
-        quit = true;
-    }
 }
 
 int main(int arc, char **argv) {

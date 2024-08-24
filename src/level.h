@@ -55,13 +55,14 @@ class Level {
     bool isFree(const Vector2 &coords);
     bool canBuildAt(const Vector2 &coords);
 
+    void dump();
+
     int width;
     int height;
     int tilewidth;
     int tileheight;
 
-    Vector2 beginCoords;
-    Vector2 endCoords;
+    Vector<Vector2> startCoords;
 
   private:
     void buildCache();

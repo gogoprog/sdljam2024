@@ -64,52 +64,6 @@ class RoadBuildingStateSystem : public System {
     }
 
     void update(const float dt) override {
-        auto &inputs = Context::get().inputs;
-        auto &level = Context::get().level;
-        auto &renderer = Context::get().renderer;
-        auto world_position = Context::get().getMouseWorldPosition();
-
-        auto tile_coords = level.getTileCoords(world_position);
-        auto position = level.getTilePosition(tile_coords);
-
-        auto &terrain = renderer.getTerrain("Snd2Watr");
-
-        if (!inputs.isKeyPressed(SDL_SCANCODE_LSHIFT)) {
-            if (inputs.isMousePressed(1)) {
-                level.setRoad(tile_coords, true);
-            }
-            renderer.draw(position, terrain, Tile::FILL1);
-        } else {
-
-            if (inputs.isMousePressed(1)) {
-                level.setRoad(tile_coords, false);
-            }
-            renderer.draw(position, terrain, Tile::FILL2);
-        }
-
-        renderer.drawCenteredText(80, "step 1:", 2);
-        renderer.drawCenteredText(150, "connect the roads!", 2);
-        renderer.drawCenteredText(230, "click to build", 1.5);
-        renderer.drawCenteredText(280, "hold shift to destroy", 1.5);
-
-        timeLeft -= dt;
-
-        Path path;
-        auto correct = level.findPath(path, level.beginCoords, level.endCoords);
-
-        if (correct) {
-            String msg;
-            msg = "next step in ";
-            msg += std::to_string(int(timeLeft));
-            msg += "s or press space";
-            renderer.drawCenteredText(400, msg.c_str(), 1);
-        }
-
-        if (timeLeft < 0 || inputs.isKeyJustPressed(SDL_SCANCODE_SPACE)) {
-            if (correct) {
-                Context::get().game.changeState(Game::State::BUILDING_TURRETS);
-            }
-        }
     }
 
   private:
@@ -245,7 +199,7 @@ class WinningStateSystem : public System {
 
         if (timeLeft < 0) {
             Context::get().game.nextWave();
-            Context::get().game.changeState(Game::State::BUILDING_ROADS);
+            /* Context::get().game.changeState(Game::State::BUILDING_ROADS); */
         }
     }
 
