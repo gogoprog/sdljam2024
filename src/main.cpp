@@ -75,7 +75,7 @@ void loop() {
 
     /* viewer("Generator"); */
 
-    renderer.update();
+    renderer.update(current_ticks);
 }
 
 int main(int arc, char **argv) {

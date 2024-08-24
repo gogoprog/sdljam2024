@@ -9,6 +9,7 @@ class PlayingSystem : public System {
     }
 
     void onAdded() override {
+        return;
 
         for (int i = 0; i < 3; ++i) {
             auto e = Factory::createVehicle();

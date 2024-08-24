@@ -31,6 +31,9 @@ struct Renderer::Pimpl {
     std::map<String, Terrain> terrains;
     std::map<String, Texture> textures;
     Vector2 cameraPosition{0, 0};
+    uint32_t lastTicks = 0;
+    int frames = 0;
+    int fps = 0;
 
     int getTextFrameIndex(const char c) {
         int frame_index = -1;
@@ -92,8 +95,18 @@ void Renderer::clear() {
     SDL_RenderClear(pimpl->renderer);
 }
 
-void Renderer::update() {
+void Renderer::update(const uint32_t ticks) {
+    drawText({1, 1}, std::to_string(pimpl->fps) + " fps");
     SDL_RenderPresent(pimpl->renderer);
+
+    pimpl->frames++;
+
+    auto delta = ticks - pimpl->lastTicks;
+    if (delta >= 1000) {
+        pimpl->fps = int(pimpl->frames / (delta / 1000.0f));
+        pimpl->frames = 0;
+        pimpl->lastTicks = ticks;
+    }
 }
 
 void Renderer::loadAtlas(const std::string &name, const bool skip_empty, const int delimiter, const bool check_content,
@@ -454,7 +467,7 @@ void Renderer::draw(const Vector2 &pos, const std::string &name) {
 }
 
 void Renderer::drawText(const Vector2 &pos, const std::string &text, const float scale, const bool background,
-                        const bool use_camera, const float alpha ) {
+                        const bool use_camera, const float alpha) {
     auto &atlas = pimpl->atlases["Font"];
     auto current_pos = pos;
 
@@ -495,7 +508,8 @@ void Renderer::drawText(const Vector2 &pos, const std::string &text, const float
     }
 }
 
-void Renderer::drawCenteredText(const int y, const std::string &text, const float scale, const bool background, const float alpha) {
+void Renderer::drawCenteredText(const int y, const std::string &text, const float scale, const bool background,
+                                const float alpha) {
     float text_width = pimpl->getTextWidth(text, scale);
     float center = width / 2;
     Vector2 pos;

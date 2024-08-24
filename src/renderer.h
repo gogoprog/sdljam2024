@@ -53,7 +53,7 @@ class Renderer {
 
     void init();
     void clear();
-    void update();
+    void update(const uint32_t ticks);
 
     void loadAtlas(const std::string &name, const bool skip_empty = true, const int delimiter = 254,
                    const bool check_content = true, const bool skip1 = false, const int step = 1);
