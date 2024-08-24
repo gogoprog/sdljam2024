@@ -19,7 +19,10 @@ class VehicleSystem : public System {
     void onEntityAdded(Entity &entity) override {
         /* auto &move = entity.add<Move>(entity.position, Vector2{350, 256}, 100); */
         auto &vehicle = entity.get<Vehicle>();
-        vehicle.target = entity.position;
+        auto &level = Context::get().level;
+        vehicle.target = level.getTileCoords(entity.position);
+        vehicle.target.x += rand() % 20;
+        vehicle.target.y += rand() % 20;
     }
 
     void updateSingle(const float dt, Entity &entity) override {
@@ -34,13 +37,7 @@ class VehicleSystem : public System {
             auto start_coords = level.getTileCoords(entity.position);
 
             if (start_coords == vehicle.target) {
-
-                Context::get().audio.playSound("error");
-                if (game.stats.lifes == 0) {
-                    game.changeState(Game::State::LOSING);
-                }
-
-                engine->removeEntity(entity);
+                setRandomTarget(entity);
             } else {
                 if (level.findPath(vehicle.path, start_coords, vehicle.target)) {
                     if (vehicle.path.size() > 1) {
@@ -51,6 +48,7 @@ class VehicleSystem : public System {
                 } else {
                     /* auto position = level.getTileCenterPosition(start_coords + directions[rand() % 8]); */
                     /* entity.add<Move>(entity.position, position, vehicle.speed); */
+                    setRandomTarget(entity);
                 }
             }
         }
@@ -59,5 +57,13 @@ class VehicleSystem : public System {
         /*     auto pos = level.getTileCenterPosition(p); */
         /*     Context::get().renderer.draw(pos, "Bullets", 0); */
         /* } */
+    }
+
+    void setRandomTarget(Entity &entity) {
+        auto &vehicle = entity.get<Vehicle>();
+        auto &level = Context::get().level;
+        vehicle.target = level.getTileCoords(entity.position);
+        vehicle.target.x += rand() % 20 - 10;
+        vehicle.target.y += rand() % 20 - 10;
     }
 };

@@ -108,7 +108,7 @@ bool Level::findPath(Path &path, const Vector2 &start, const Vector2 &end) {
                 for (auto &direction : directions) {
                     auto next = last + direction;
 
-                    if (getRoad(next)) {
+                    if (getRoad(next) && !locks[next]) {
                         if (std::find(node.path.begin(), node.path.end(), next) == node.path.end()) {
                             auto copy = node;
                             copy.path.push_back(next);

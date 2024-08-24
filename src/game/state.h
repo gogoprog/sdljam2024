@@ -180,8 +180,6 @@ class WinningStateSystem : public System {
         timeLeft = 4;
 
         auto &game = Context::get().game;
-
-        game.stats.money += 100 + game.waveCount * 100;
     }
 
     void update(const float dt) override {
@@ -198,7 +196,7 @@ class WinningStateSystem : public System {
         }
 
         if (timeLeft < 0) {
-            Context::get().game.nextWave();
+            /* Context::get().game.nextWave(); */
             /* Context::get().game.changeState(Game::State::BUILDING_ROADS); */
         }
     }

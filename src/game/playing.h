@@ -9,9 +9,7 @@ class PlayingSystem : public System {
     }
 
     void onAdded() override {
-        return;
-
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 128; ++i) {
             auto e = Factory::createVehicle();
             e->position.x = 200 + rand() % 200;
             e->position.y = 200 + rand() % 200;

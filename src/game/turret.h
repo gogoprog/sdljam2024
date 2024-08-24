@@ -27,6 +27,9 @@ class TurretSystem : public System {
     }
 
     void onEntityAdded(Entity &entity) override {
+        auto &level = Context::get().level;
+        auto coords = level.getTileCoords(entity.position);
+        level.lock2x2(coords);
     }
 
     void updateSingle(const float dt, Entity &entity) override {

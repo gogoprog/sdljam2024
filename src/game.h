@@ -30,11 +30,8 @@ class Game {
     void init();
     void reset();
     void changeState(const State state);
-    void nextWave();
 
     Stats stats;
-    Wave currentWave;
-    int waveCount{0};
 
     int turretCost{250};
 };

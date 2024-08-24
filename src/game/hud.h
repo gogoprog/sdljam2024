@@ -31,12 +31,6 @@ class HudSystem : public System {
             renderer.drawText({renderer.width - 130, 215 + 150}, buffer, 1, false);
         }
         {
-            char buffer[64];
-            sprintf(buffer, "%15d", game.waveCount);
-            renderer.drawText({renderer.width - 130, 188 + 285}, "wave", 1, false);
-            renderer.drawText({renderer.width - 130, 215 + 285}, buffer, 1, false);
-        }
-        {
             auto minimapSize = 120;
 
             Vector2 origin = {renderer.width - 138, 4};
