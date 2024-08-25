@@ -96,6 +96,8 @@ void Game::changeState(const State state) {
             engine.disableSystem<EditorSystem>();
             engine.disableSystem<HudSystem>();
             engine.disableSystem<PlayingSystem>();
+            engine.disableSystem<VehicleSelectSystem>();
+            engine.disableSystem<VehicleSelectedSystem>();
         } break;
 
         case State::PLAYING: {
@@ -103,6 +105,8 @@ void Game::changeState(const State state) {
             engine.disableSystem<EditorSystem>();
             engine.enableSystem<HudSystem>();
             engine.enableSystem<PlayingSystem>();
+            engine.enableSystem<VehicleSelectSystem>();
+            engine.enableSystem<VehicleSelectedSystem>();
         } break;
 
         case State::EDITOR: {

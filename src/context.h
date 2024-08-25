@@ -29,4 +29,9 @@ class Context {
 
         return mouse_position + camera_position;
     }
+
+    Vector2 getWorldPosition(Vector2 screen_position) const {
+        auto camera_position = renderer.getCameraPosition();
+        return screen_position + camera_position;
+    }
 };

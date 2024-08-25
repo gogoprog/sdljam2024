@@ -53,6 +53,10 @@ class Inputs {
         return !previousMouseButtonStates[button] && currentMouseButtonStates[button];
     }
 
+    bool isMouseJustReleased(const int button) /*const*/ {
+        return previousMouseButtonStates[button] && !currentMouseButtonStates[button];
+    }
+
     bool isMousePressed(const int button) /*const*/ {
         return currentMouseButtonStates[button];
     }

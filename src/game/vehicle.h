@@ -37,7 +37,7 @@ class VehicleSystem : public System {
             auto start_coords = level.getTileCoords(entity.position);
 
             if (start_coords == vehicle.target) {
-                setRandomTarget(entity);
+                /* setRandomTarget(entity); */
             } else {
                 if (level.findPath(vehicle.path, start_coords, vehicle.target)) {
                     if (vehicle.path.size() > 1) {

@@ -524,9 +524,16 @@ void Renderer::drawFilledQuad(const Vector2 &pos, const Vector2 &size, const int
     SDL_RenderFillRect(pimpl->renderer, &rect);
 }
 
-void Renderer::drawQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b) {
+void Renderer::drawQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b,
+                        const bool use_camera) {
     SDL_SetRenderDrawColor(pimpl->renderer, r, g, b, 255);
+
     SDL_Rect rect = getRect(pos, size);
+
+    if (use_camera) {
+        rect.x -= pimpl->cameraPosition.x;
+        rect.y -= pimpl->cameraPosition.y;
+    }
     SDL_RenderDrawRect(pimpl->renderer, &rect);
 }
 
