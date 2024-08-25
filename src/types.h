@@ -99,3 +99,12 @@ inline float clampAngle(const float input) {
 
 static constexpr Array<Vector2, 8> directions = {Vector2{0, -1}, {1, 0},  {0, 1},   {-1, 0},
                                                  {1, 1},         {1, -1}, {-1, -1}, {-1, 1}};
+
+template <>
+struct std::hash<Vector2>
+{
+  inline std::size_t operator()(const Vector2& k) const
+  {
+      return k.x * 1000 + k.y;
+  }
+};

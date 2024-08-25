@@ -10,6 +10,9 @@ class Level {
     inline static int tileSpacing = Tile::SIZE * 2;
 
     Level();
+    ~Level();
+
+    void reset();
 
     inline Vector2 getTileCoords(const Vector2 &world_pos) const {
         int col = int(std::floor(world_pos.x / tileSpacing));
@@ -35,6 +38,7 @@ class Level {
 
     void lock(const Vector2 &coords) {
         locks[coords] = true;
+        invalidatePathCache();
     }
 
     void lock2x2(const Vector2 &coords) {
@@ -42,9 +46,10 @@ class Level {
         locks[{coords.x - 1, coords.y}] = true;
         locks[{coords.x - 1, coords.y - 1}] = true;
         locks[{coords.x, coords.y - 1}] = true;
+        invalidatePathCache();
     }
 
-    bool getRoad(const Vector2 &coords) {
+    inline bool getRoad(const Vector2 &coords) {
         return roadmap[coords];
     }
 
@@ -68,8 +73,12 @@ class Level {
     void buildCache();
     void updateCache(const Vector2 &from, const Vector2 &to);
     void setLockedRoad(const Vector2 &coords);
+    void invalidatePathCache();
 
-    Map<Vector2, bool> roadmap;
-    Map<Vector2, bool> locks;
+    class Pimpl;
+    std::unique_ptr<Pimpl> pimpl;
+
+    UnorderedMap<Vector2, bool> roadmap;
+    UnorderedMap<Vector2, bool> locks;
     Vector<int> cachedTypes;
 };

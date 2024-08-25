@@ -72,7 +72,8 @@ void Game::init() {
 void Game::reset() {
     auto &level = Context::get().level;
     auto &engine = Context::get().engine;
-    level = Level();
+
+    level.reset();
 
     engine.removeAllEntities();
     engine.removeAllSystems();
@@ -92,12 +93,14 @@ void Game::changeState(const State state) {
 
         case State::MENU: {
             engine.enableSystem<MenuSystem>();
+            engine.disableSystem<EditorSystem>();
             engine.disableSystem<HudSystem>();
             engine.disableSystem<PlayingSystem>();
         } break;
 
         case State::PLAYING: {
             engine.disableSystem<MenuSystem>();
+            engine.disableSystem<EditorSystem>();
             engine.enableSystem<HudSystem>();
             engine.enableSystem<PlayingSystem>();
         } break;

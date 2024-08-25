@@ -18,5 +18,10 @@ class PlayingSystem : public System {
     }
 
     void update(const float dt) override {
+        auto &inputs = Context::get().inputs;
+
+        if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
+            Context::get().game.changeState(Game::State::MENU);
+        }
     }
 };
