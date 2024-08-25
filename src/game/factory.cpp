@@ -4,6 +4,7 @@
 #include "bullet.h"
 #include "camera.h"
 #include "control.h"
+#include "fx.h"
 #include "hittable.h"
 #include "spawn.h"
 #include "sprite.h"
@@ -118,5 +119,14 @@ SharedPtr<Entity> Factory::createFlag() {
     e->get<Animation>().autoRemove = false;
     e->get<Animation>().loop = true;
     e->add<Flag>();
+    return e;
+}
+
+SharedPtr<Entity> Factory::createSelectFx() {
+    auto e = std::make_shared<Entity>();
+    e->add<Sprite>();
+    e->get<Sprite>().textureName = "Cursor1";
+    e->get<Sprite>().layer = 2;
+    e->add<SelectFx>();
     return e;
 }

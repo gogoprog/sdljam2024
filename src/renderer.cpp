@@ -453,7 +453,7 @@ void Renderer::draw(const Vector2 &pos, const Terrain &terrain, const int tilein
     SDL_RenderCopy(pimpl->renderer, terrain.texture, &rect, &drect);
 }
 
-void Renderer::draw(const Vector2 &pos, const std::string &name) {
+void Renderer::draw(const Vector2 &pos, const std::string &name, const bool use_camera) {
     auto &texture = pimpl->textures[name];
     auto rect = texture.rect;
     auto drect = rect;
@@ -461,8 +461,15 @@ void Renderer::draw(const Vector2 &pos, const std::string &name) {
     drect.y = pos.y;
     drect.x -= texture.pivot.x;
     drect.y -= texture.pivot.y;
+
+    if (use_camera) {
+        drect.x -= pimpl->cameraPosition.x;
+        drect.y -= pimpl->cameraPosition.y;
+    }
+
     drect.w *= 2;
     drect.h *= 2;
+
     SDL_RenderCopy(pimpl->renderer, texture.texture, &rect, &drect);
 }
 

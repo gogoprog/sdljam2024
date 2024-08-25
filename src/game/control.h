@@ -133,6 +133,23 @@ class VehicleSelectedSystem : public System {
     Vector2 startMousePosition;
     Vector2 endMousePosition;
 
+    void update(const float dt) override {
+        auto &inputs = Context::get().inputs;
+        auto &level = Context::get().level;
+
+        System::update(dt);
+
+        if (inputs.isMouseJustPressed(3)) {
+            auto pos = Context::get().getMouseWorldPosition();
+            auto coords = level.getTileCoords(pos);
+            auto rpos = level.getTileCenterPosition(coords);
+
+            auto e = Factory::createSelectFx();
+            e->position = rpos;
+            engine->addEntity(e);
+        }
+    }
+
     void updateSingle(const float dt, Entity &entity) override {
         auto &level = Context::get().level;
         auto &game = Context::get().game;

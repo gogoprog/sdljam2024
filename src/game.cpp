@@ -15,6 +15,7 @@
 #include "game/state.h"
 #include "game/turret.h"
 #include "game/vehicle.h"
+#include "game/fx.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -34,6 +35,7 @@ void Game::init() {
     engine.enableSystem<ShakeSystem>();
     engine.enableSystem<SpriteRotaterSystem>();
     engine.enableSystem<SpriteRendererSystem>();
+    engine.enableSystem<SelectFxSystem>();
 
     {
         auto e = Factory::createCamera();

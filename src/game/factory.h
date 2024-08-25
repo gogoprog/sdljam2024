@@ -14,4 +14,5 @@ class Factory {
     static SharedPtr<Entity> createSmallExplosion();
     static SharedPtr<Entity> createExplosion();
     static SharedPtr<Entity> createFlag();
+    static SharedPtr<Entity> createSelectFx();
 };

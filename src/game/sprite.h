@@ -3,6 +3,7 @@
 #include "../context.h"
 
 struct Sprite : public Component {
+    String textureName;
     String atlasName;
     int frameIndex{0};
     int layer = 0;
@@ -30,7 +31,14 @@ class SpriteRendererSystem : public System {
 
         for (auto &items : itemsPerLayer) {
             for (auto &item : items) {
-                renderer.draw(item.first, item.second->atlasName, item.second->frameIndex);
+
+                auto spr = item.second;
+
+                if (!spr->textureName.empty()) {
+                    renderer.draw(item.first, spr->textureName, true);
+                } else {
+                    renderer.draw(item.first, spr->atlasName, spr->frameIndex);
+                }
             }
         }
     }
