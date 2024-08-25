@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../context.h"
-#include "factory.h"
 #include "control.h"
+#include "factory.h"
 
 class PlayingSystem : public System {
   public:
@@ -10,12 +10,26 @@ class PlayingSystem : public System {
     }
 
     void onAdded() override {
-        for (int i = 0; i < 5; ++i) {
+        auto &level = Context::get().level;
+
+        for (int i = 0; i < 12; ++i) {
             auto e = Factory::createVehicle();
             e->position.x = 200 + rand() % 200;
             e->position.y = 200 + rand() % 200;
-
             e->add<Selectable>();
+            engine->addEntity(e);
+        }
+
+        for (int i = 0; i < 12; ++i) {
+            auto e = Factory::createVehicle();
+            /* auto pos = level.getTilePosition(level.startCoords[1]); */
+            auto pos = Vector2{450, 450};
+            e->position.x = pos.x + rand() % 200;
+            e->position.y = pos.y + rand() % 200;
+            e->get<Life>().team = 1;
+            e->get<Sprite>().r = 250;
+            e->get<Sprite>().g = 12;
+            e->get<Sprite>().b = 12;
             engine->addEntity(e);
         }
     }

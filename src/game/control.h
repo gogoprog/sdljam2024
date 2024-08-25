@@ -172,5 +172,10 @@ class VehicleSelectedSystem : public System {
         const int size = 42;
 
         renderer.drawQuad(pos - Vector2{size, size} / 2, {size, size}, 255, 255, 255, true);
+
+        if (entity.has<Move>()) {
+            auto rtarget = level.getTileCenterPosition(vehicle.target);
+            renderer.draw(rtarget, "Cursor1", true);
+        }
     }
 };

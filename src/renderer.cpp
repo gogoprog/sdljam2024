@@ -87,7 +87,7 @@ void Renderer::init() {
     width = 1280;
     height = 800;
     SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_OPENGL, &pimpl->window, &pimpl->renderer);
-    SDL_SetWindowTitle(pimpl->window, "hardvacuum-defense");
+    SDL_SetWindowTitle(pimpl->window, "islands war - sdljam2024");
     SDL_SetRenderDrawBlendMode(pimpl->renderer, SDL_BLENDMODE_BLEND);
 }
 
@@ -437,8 +437,9 @@ void Renderer::draw(const Vector2 &pos, const Atlas &atlas, const int frameindex
     SDL_RenderCopy(pimpl->renderer, atlas.texture, &rect, &drect);
 }
 
-void Renderer::draw(const Vector2 &pos, const std::string &name, const int frameindex, const bool use_pivot) {
+void Renderer::draw(const Vector2 &pos, const std::string &name, const int frameindex, const bool use_pivot, const int r, const int g, const int b) {
     auto &atlas = pimpl->atlases[name];
+    SDL_SetTextureColorMod(atlas.texture, r, g, b);
     draw(pos, atlas, frameindex, use_pivot);
 }
 

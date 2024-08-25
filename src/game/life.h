@@ -7,6 +7,7 @@
 #include <cstdlib>
 
 struct Life : public Component {
+    int team{0};
     int hp{10};
 };
 

@@ -124,9 +124,6 @@ SharedPtr<Entity> Factory::createFlag() {
 
 SharedPtr<Entity> Factory::createSelectFx() {
     auto e = std::make_shared<Entity>();
-    e->add<Sprite>();
-    e->get<Sprite>().textureName = "Cursor1";
-    e->get<Sprite>().layer = 2;
     e->add<SelectFx>();
     return e;
 }

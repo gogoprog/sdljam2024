@@ -7,6 +7,7 @@ struct Sprite : public Component {
     String atlasName;
     int frameIndex{0};
     int layer = 0;
+    uint8_t r = 255, g = 255, b = 255;
 };
 
 struct RotatableSprite : public Component {
@@ -37,7 +38,7 @@ class SpriteRendererSystem : public System {
                 if (!spr->textureName.empty()) {
                     renderer.draw(item.first, spr->textureName, true);
                 } else {
-                    renderer.draw(item.first, spr->atlasName, spr->frameIndex);
+                    renderer.draw(item.first, spr->atlasName, spr->frameIndex, true, spr->r, spr->g, spr->b);
                 }
             }
         }
