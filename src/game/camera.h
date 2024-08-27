@@ -10,6 +10,7 @@ class CameraSystem : public System {
   public:
     CameraSystem() {
         require<Camera>();
+        priority = 999;
     }
 
     void updateSingle(const float dt, Entity &entity) override {

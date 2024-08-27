@@ -59,6 +59,13 @@ class Vector2 {
         auto len = getLength();
         return {x / len, y / len};
     }
+
+    static float getSquareDistance(const Vector2 &v1, const Vector2 &v2) {
+        auto dx = v2.x - v1.x;
+        auto dy = v2.y - v1.y;
+
+        return dx * dx + dy * dy;
+    }
 };
 
 inline Vector2 operator+(const Vector2 &v1, const Vector2 &v2) {

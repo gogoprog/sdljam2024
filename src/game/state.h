@@ -46,7 +46,7 @@ class FiringStateSystem : public System {
 
         {
             auto delta = cursor_position - entity.position;
-            rotatable.angle = (std::atan2(delta.y, delta.x) * 180.0f / std::numbers::pi) + 90;
+            entity.rotation = (std::atan2(delta.y, delta.x) * 180.0f / std::numbers::pi) + 90;
         }
     }
 

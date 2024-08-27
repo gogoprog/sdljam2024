@@ -43,13 +43,13 @@ class TurretSystem : public System {
             turret.timeSinceLastFire = 0;
             auto e = Factory::createBullet();
             auto speed = 500;
-            auto angle = (rotatable.angle - 90) * std::numbers::pi / 180.0f;
+            auto angle = (entity.rotation - 90) * std::numbers::pi / 180.0f;
             auto velocity = Vector2(std::cos(angle) * speed, std::sin(angle) * speed);
             auto direction = velocity.getNormalized();
             e->get<Bullet>().velocity = velocity;
             e->get<Bullet>().lifetimeLeft = stat.range / speed;
             e->get<Bullet>().damage = stat.damage;
-            e->get<RotatableSprite>().angle = rotatable.angle;
+            e->rotation = entity.rotation;
             e->position = entity.position + direction * 32;
             Context::get().engine.addEntity(e);
             turret.mustFire = false;

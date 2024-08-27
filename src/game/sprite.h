@@ -11,7 +11,6 @@ struct Sprite : public Component {
 };
 
 struct RotatableSprite : public Component {
-    float angle;
     Vector<int> frames;
     int frameOffset{0};
 };
@@ -68,9 +67,9 @@ class SpriteRotaterSystem : public System {
 
         auto &frames = rotatable.frames;
         auto frame = frames[0];
-        rotatable.angle = clampAngle(rotatable.angle);
+        entity.rotation = clampAngle(entity.rotation );
         auto step = 45 / 2.0f;
-        auto angle = rotatable.angle;
+        auto angle = entity.rotation;
 
         if (angle < step) {
             frame = frames[0];

@@ -31,7 +31,7 @@ class MoveSystem : public System {
         auto &move = entity.get<Move>();
 
         auto delta = move.to - move.from;
-        rotatable.angle = (std::atan2(delta.y, delta.x) * 180.0f / std::numbers::pi) + 90;
+        entity.rotation = (std::atan2(delta.y, delta.x) * 180.0f / std::numbers::pi) + 90;
 
         move.duration = delta.getLength() / move.speed;
     }

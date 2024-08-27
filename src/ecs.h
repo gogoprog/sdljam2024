@@ -19,6 +19,7 @@ class Entity {
 
     String name;
     Vector2 position;
+    float rotation = 0.0f;
 
     template <typename T, typename... Args> T &add(Args... args) {
         assert(!has<T>());

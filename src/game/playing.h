@@ -17,6 +17,7 @@ class PlayingSystem : public System {
             e->position.x = 200 + rand() % 200;
             e->position.y = 200 + rand() % 200;
             e->add<Selectable>();
+            e->get<Life>().team = 0;
             engine->addEntity(e);
         }
 

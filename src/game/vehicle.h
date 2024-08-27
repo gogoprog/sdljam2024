@@ -20,6 +20,49 @@ class VehicleSystem : public System {
   public:
     VehicleSystem() {
         require<Vehicle>();
+    }
+
+    void onEntityAdded(Entity &entity) override {
+        auto &vehicle = entity.get<Vehicle>();
+        auto &level = Context::get().level;
+    }
+
+    void updateSingle(const float dt, Entity &entity) override {
+        auto &level = Context::get().level;
+        auto &game = Context::get().game;
+        auto &vehicle = entity.get<Vehicle>();
+        auto &life = entity.get<Life>();
+
+        if (!entity.has<TargetPosition>() && !entity.has<Move>()) {
+
+            Entity::Ptr closest = nullptr;
+            float closest_distance = std::numeric_limits<float>::max();
+
+            for (auto &other : entities) {
+                auto &other_life = other->get<Life>();
+
+                if (other_life.team != life.team) {
+                    auto distance = Vector2::getSquareDistance(entity.position, other->position);
+
+                    if (distance < closest_distance) {
+                        closest = other;
+                        closest_distance = distance;
+                    }
+                }
+            }
+
+            if (closest != nullptr) {
+                auto delta = closest->position - entity.position;
+                entity.rotation = (std::atan2(delta.y, delta.x) * 180.0f / std::numbers::pi) + 90;
+            }
+        }
+    }
+};
+
+class VehicleTargetPositionSystem : public System {
+  public:
+    VehicleTargetPositionSystem() {
+        require<Vehicle>();
         require<Movable>();
         require<TargetPosition>();
     }
@@ -53,13 +96,5 @@ class VehicleSystem : public System {
                 }
             }
         }
-    }
-
-    void setRandomTarget(Entity &entity) {
-        auto &vehicle = entity.get<Vehicle>();
-        auto &level = Context::get().level;
-        /* vehicle.target = level.getTileCoords(entity.position); */
-        /* vehicle.target.x += rand() % 20 - 10; */
-        /* vehicle.target.y += rand() % 20 - 10; */
     }
 };
