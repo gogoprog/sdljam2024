@@ -18,11 +18,13 @@ class PlayingSystem : public System {
             e->position.y = 200 + rand() % 200;
             e->add<Selectable>();
             e->get<Life>().team = 0;
+            e->name = "playertank" + std::to_string(i);
             engine->addEntity(e);
         }
 
         for (int i = 0; i < 12; ++i) {
             auto e = Factory::createVehicle();
+            e->name = "computertank" + std::to_string(i);
             /* auto pos = level.getTilePosition(level.startCoords[1]); */
             auto pos = Vector2{450, 450};
             e->position.x = pos.x + rand() % 200;

@@ -218,6 +218,5 @@ inline void System::update(const float dt) {
 
     for (auto &entity : entities) {
         updateSingle(dt, *entity);
-        entities.resize(0);
     }
 }

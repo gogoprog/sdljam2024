@@ -5,14 +5,14 @@
 
 class Factory {
   public:
-    static SharedPtr<Entity> createCamera();
-    static SharedPtr<Entity> createBase();
-    static SharedPtr<Entity> createTurret();
-    static SharedPtr<Entity> createBullet();
-    static SharedPtr<Entity> createVehicle();
-    static SharedPtr<Entity> createSpawn();
-    static SharedPtr<Entity> createSmallExplosion();
-    static SharedPtr<Entity> createExplosion();
-    static SharedPtr<Entity> createFlag();
-    static SharedPtr<Entity> createSelectFx();
+    static Entity::Ptr createCamera();
+    static Entity::Ptr createBase();
+    static Entity::Ptr createTurret();
+    static Entity::Ptr createBullet(const Entity& source, float range, float damage);
+    static Entity::Ptr createVehicle();
+    static Entity::Ptr createSpawn();
+    static Entity::Ptr createSmallExplosion();
+    static Entity::Ptr createExplosion();
+    static Entity::Ptr createFlag();
+    static Entity::Ptr createSelectFx();
 };

@@ -41,16 +41,7 @@ class TurretSystem : public System {
 
         if (turret.timeSinceLastFire > stat.interval && turret.mustFire) {
             turret.timeSinceLastFire = 0;
-            auto e = Factory::createBullet();
-            auto speed = 500;
-            auto angle = (entity.rotation - 90) * std::numbers::pi / 180.0f;
-            auto velocity = Vector2(std::cos(angle) * speed, std::sin(angle) * speed);
-            auto direction = velocity.getNormalized();
-            e->get<Bullet>().velocity = velocity;
-            e->get<Bullet>().lifetimeLeft = stat.range / speed;
-            e->get<Bullet>().damage = stat.damage;
-            e->rotation = entity.rotation;
-            e->position = entity.position + direction * 32;
+            auto e = Factory::createBullet(entity, stat.range, stat.damage);
             Context::get().engine.addEntity(e);
             turret.mustFire = false;
 

@@ -2,6 +2,7 @@
 
 #include "../context.h"
 #include "move.h"
+#include "weapon.h"
 
 struct TargetPosition : public Component {
     Vector2 position;
@@ -14,12 +15,14 @@ struct TargetEntity : public Component {
 struct Vehicle : public Component {
     Path path;
     float speed = 100;
+    float fireDistance = 250;
 };
 
 class VehicleSystem : public System {
   public:
     VehicleSystem() {
         require<Vehicle>();
+        require<Weapon>();
     }
 
     void onEntityAdded(Entity &entity) override {
@@ -34,7 +37,6 @@ class VehicleSystem : public System {
         auto &life = entity.get<Life>();
 
         if (!entity.has<TargetPosition>() && !entity.has<Move>()) {
-
             Entity::Ptr closest = nullptr;
             float closest_distance = std::numeric_limits<float>::max();
 
@@ -54,6 +56,10 @@ class VehicleSystem : public System {
             if (closest != nullptr) {
                 auto delta = closest->position - entity.position;
                 entity.rotation = (std::atan2(delta.y, delta.x) * 180.0f / std::numbers::pi) + 90;
+
+                if (closest_distance < vehicle.fireDistance * vehicle.fireDistance) {
+                    entity.get<Weapon>().mustFire = true;
+                }
             }
         }
     }
@@ -92,7 +98,10 @@ class VehicleTargetPositionSystem : public System {
                         auto position = level.getTileCenterPosition(vehicle.path[1]);
                         entity.add<Move>(entity.position, position, vehicle.speed);
                     } else if (vehicle.path.size() == 0) {
+                        entity.remove<TargetPosition>();
                     }
+                } else {
+                    entity.remove<TargetPosition>();
                 }
             }
         }

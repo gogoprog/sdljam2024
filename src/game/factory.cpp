@@ -10,6 +10,7 @@
 #include "sprite.h"
 #include "turret.h"
 #include "vehicle.h"
+#include "weapon.h"
 
 const Array<int, 8> turret_frames = {2, 3, 5, 6, 7, 8, 9, 4};
 const Array<int, 8> bullet_frames = {1, 2, 14, 26, 25, 24, 12, 0};
@@ -46,7 +47,7 @@ SharedPtr<Entity> Factory::createTurret() {
     return e;
 }
 
-SharedPtr<Entity> Factory::createBullet() {
+SharedPtr<Entity> Factory::createBullet(const Entity &source, float range, float damage) {
     auto e = std::make_shared<Entity>();
     e->add<Bullet>();
     e->add<Sprite>();
@@ -56,6 +57,17 @@ SharedPtr<Entity> Factory::createBullet() {
     e->add<RotatableSprite>();
     /* e->get<RotatableSprite>().frames = std::span(bullet_frames); */
     e->get<RotatableSprite>().frames = Vector<int>{bullet_frames.begin(), bullet_frames.end()};
+
+    auto &entity = source;
+    auto speed = 500;
+    auto angle = (entity.rotation - 90) * std::numbers::pi / 180.0f;
+    auto velocity = Vector2(std::cos(angle) * speed, std::sin(angle) * speed);
+    auto direction = velocity.getNormalized();
+    e->get<Bullet>().velocity = velocity;
+    e->get<Bullet>().lifetimeLeft = range / speed;
+    e->get<Bullet>().damage = damage;
+    e->rotation = entity.rotation;
+    e->position = entity.position + direction * 32;
 
     return e;
 }
@@ -73,6 +85,8 @@ SharedPtr<Entity> Factory::createVehicle() {
     e->add<Hittable>();
     e->get<Hittable>().radius = 20;
     e->add<Life>();
+
+    e->add<Weapon>();
 
     return e;
 }
