@@ -2,8 +2,8 @@
 
 #include "types.h"
 #include <algorithm>
-#include <functional>
 #include <cassert>
+#include <functional>
 
 struct Component {};
 
@@ -15,6 +15,8 @@ class Entity {
     friend class System;
 
   public:
+    using Ptr = SharedPtr<Entity>;
+
     String name;
     Vector2 position;
 
@@ -69,6 +71,7 @@ class System {
   protected:
     Vector<TypeIndex> requiredComponents;
     Engine *engine{nullptr};
+    Vector<Entity::Ptr> entities;
     int priority{0};
 };
 
@@ -186,9 +189,9 @@ class Engine {
         }
     }
 
-    std::vector<System *> systems;
-    std::vector<System *> allSystems;
-    std::vector<SharedPtr<Entity>> entities;
+    Vector<System *> systems;
+    Vector<System *> allSystems;
+    Vector<Entity::Ptr> entities;
 };
 
 inline void Entity::notifyAdd(const TypeIndex component_name) {
@@ -198,15 +201,22 @@ inline void Entity::notifyAdd(const TypeIndex component_name) {
 }
 
 inline void System::update(const float dt) {
-    auto entities = engine->entities;
-    for (auto &entityptr : entities) {
+    auto &all_entities = engine->entities;
+    entities.resize(0);
+    for (auto &entityptr : all_entities) {
         auto &entity = *entityptr;
         if (std::all_of(requiredComponents.begin(), requiredComponents.end(), [&](auto name) {
                 auto it = std::find_if(entity.components.begin(), entity.components.end(),
                                        [&](auto &kv) { return kv.first == name; });
                 return it != entity.components.end();
             })) {
-            updateSingle(dt, entity);
+
+            entities.push_back(entityptr);
         }
+    }
+
+    for (auto &entity : entities) {
+        updateSingle(dt, *entity);
+        entities.resize(0);
     }
 }

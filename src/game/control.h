@@ -166,15 +166,19 @@ class VehicleSelectedSystem : public System {
         if (inputs.isMouseJustPressed(3)) {
             auto pos = Context::get().getMouseWorldPosition();
             auto coords = level.getTileCoords(pos);
-            vehicle.target = coords;
+            if(!entity.has<TargetPosition>())
+            {
+                entity.add<TargetPosition>();
+            }
+            entity.get<TargetPosition>().position = coords;
         }
 
         const int size = 42;
 
         renderer.drawQuad(pos - Vector2{size, size} / 2, {size, size}, 255, 255, 255, true);
 
-        if (entity.has<Move>()) {
-            auto rtarget = level.getTileCenterPosition(vehicle.target);
+        if (entity.has<TargetPosition>()) {
+            auto rtarget = level.getTileCenterPosition(entity.get<TargetPosition>().position);
             renderer.draw(rtarget, "Cursor1", true);
         }
     }

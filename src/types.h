@@ -3,12 +3,12 @@
 #include <array>
 #include <cmath>
 #include <map>
-#include <unordered_map>
 #include <memory>
 #include <string>
-#include <vector>
 #include <typeindex>
 #include <typeinfo>
+#include <unordered_map>
+#include <vector>
 
 using String = std::string;
 template <typename T> using Vector = std::vector<T>;
@@ -34,10 +34,13 @@ static const double pi = 3.14159265;
 class Vector2 {
   public:
     Vector2() = default;
+
     constexpr Vector2(int _x, int _y) : x(_x), y(_y) {
     }
+
     Vector2(float _x, float _y) : x(_x), y(_y) {
     }
+
     Vector2(double _x, double _y) : x(_x), y(_y) {
     }
 
@@ -100,11 +103,8 @@ inline float clampAngle(const float input) {
 static constexpr Array<Vector2, 8> directions = {Vector2{0, -1}, {1, 0},  {0, 1},   {-1, 0},
                                                  {1, 1},         {1, -1}, {-1, -1}, {-1, 1}};
 
-template <>
-struct std::hash<Vector2>
-{
-  inline std::size_t operator()(const Vector2& k) const
-  {
-      return k.x * 1000 + k.y;
-  }
+template <> struct std::hash<Vector2> {
+    inline std::size_t operator()(const Vector2 &k) const {
+        return k.x * 1000 + k.y;
+    }
 };
