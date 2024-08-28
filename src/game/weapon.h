@@ -7,7 +7,7 @@ struct Weapon : public Component {
     float timeSinceLastFire{100};
     bool mustFire{false};
     float range = 250;
-    float damage = 100;
+    float damage = 10;
     float interval = 1;
 };
 
@@ -18,9 +18,6 @@ class WeaponSystem : public System {
     }
 
     void onEntityAdded(Entity &entity) override {
-        auto &level = Context::get().level;
-        auto coords = level.getTileCoords(entity.position);
-        level.lock2x2(coords);
     }
 
     void updateSingle(const float dt, Entity &entity) override {

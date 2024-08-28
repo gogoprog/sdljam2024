@@ -437,7 +437,8 @@ void Renderer::draw(const Vector2 &pos, const Atlas &atlas, const int frameindex
     SDL_RenderCopy(pimpl->renderer, atlas.texture, &rect, &drect);
 }
 
-void Renderer::draw(const Vector2 &pos, const std::string &name, const int frameindex, const bool use_pivot, const int r, const int g, const int b) {
+void Renderer::draw(const Vector2 &pos, const std::string &name, const int frameindex, const bool use_pivot,
+                    const int r, const int g, const int b) {
     auto &atlas = pimpl->atlases[name];
     SDL_SetTextureColorMod(atlas.texture, r, g, b);
     draw(pos, atlas, frameindex, use_pivot);
@@ -526,9 +527,14 @@ void Renderer::drawCenteredText(const int y, const std::string &text, const floa
     drawText(pos, text, scale, background, false, alpha);
 }
 
-void Renderer::drawFilledQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b) {
-    SDL_SetRenderDrawColor(pimpl->renderer, r, g, b, 255);
+void Renderer::drawFilledQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b,
+                              const float alpha, const bool use_camera) {
+    SDL_SetRenderDrawColor(pimpl->renderer, r, g, b, int(alpha * 255));
     SDL_Rect rect = getRect(pos, size);
+    if (use_camera) {
+        rect.x -= pimpl->cameraPosition.x;
+        rect.y -= pimpl->cameraPosition.y;
+    }
     SDL_RenderFillRect(pimpl->renderer, &rect);
 }
 

@@ -51,7 +51,7 @@ void Game::init() {
         engine.addEntity(e);
     }
 
-    if (1)
+    if (0)
         for (int i = 0; i < 10; ++i) {
             Vector2 pos = {rand() % 2048, rand() % 2048};
 

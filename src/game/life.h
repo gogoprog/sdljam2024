@@ -8,7 +8,7 @@
 
 struct Life : public Component {
     int team{0};
-    int hp{10};
+    int hp{100};
 };
 
 class LifeSystem : public System {

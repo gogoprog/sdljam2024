@@ -22,7 +22,7 @@ class PlayingSystem : public System {
             engine->addEntity(e);
         }
 
-        for (int i = 0; i < 12; ++i) {
+        for (int i = 0; i < 18; ++i) {
             auto e = Factory::createVehicle();
             e->name = "computertank" + std::to_string(i);
             /* auto pos = level.getTilePosition(level.startCoords[1]); */

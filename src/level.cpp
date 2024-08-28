@@ -200,6 +200,20 @@ void Level::render(uint32_t ticks, Renderer &renderer) {
             ++i;
         }
     }
+
+    if (0)
+        for (int y = 0; y < tileheight; ++y) {
+            for (int x = 0; x < tilewidth; ++x) {
+                Vector2 pos = {x * tileSpacing, y * tileSpacing};
+
+                if (locks[{x, y}]) {
+                    renderer.drawFilledQuad(pos, {tileSpacing, tileSpacing}, 255, 0, 0, 0.5f, true);
+                } else {
+
+                    renderer.drawFilledQuad(pos, {tileSpacing, tileSpacing}, 255, 255, 255, 0.5f, true);
+                }
+            }
+        }
 }
 
 bool Level::findPath(Path &path, const Vector2 &start, const Vector2 &end) {
