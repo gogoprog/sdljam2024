@@ -1,4 +1,6 @@
+
 #include "level.h"
+#include "context.h"
 #include <algorithm>
 #include <queue>
 #include <sstream>
@@ -201,12 +203,12 @@ void Level::render(uint32_t ticks, Renderer &renderer) {
         }
     }
 
-    if (0)
+    if (Context::get().inputs.isKeyPressed(SDL_SCANCODE_F1))
         for (int y = 0; y < tileheight; ++y) {
             for (int x = 0; x < tilewidth; ++x) {
                 Vector2 pos = {x * tileSpacing, y * tileSpacing};
 
-                if (locks[{x, y}]) {
+                if (isFree({x, y})) {
                     renderer.drawFilledQuad(pos, {tileSpacing, tileSpacing}, 255, 0, 0, 0.5f, true);
                 } else {
 

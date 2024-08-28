@@ -31,6 +31,7 @@ void Game::init() {
     engine.enableSystem<BulletSystem>();
     engine.enableSystem<LifeSystem>();
     engine.enableSystem<MoveSystem>();
+    engine.enableSystem<MovableSystem>();
     engine.enableSystem<CameraSystem>();
     engine.enableSystem<ControlSystem>();
     engine.enableSystem<AnimationSystem>();

@@ -12,7 +12,7 @@ class PlayingSystem : public System {
     void onAdded() override {
         auto &level = Context::get().level;
 
-        for (int i = 0; i < 12; ++i) {
+        for (int i = 0; i < 10; ++i) {
             auto e = Factory::createVehicle();
             e->position.x = 200 + rand() % 200;
             e->position.y = 200 + rand() % 200;
