@@ -19,6 +19,30 @@ class MovableSystem : public System {
     }
 
     void onAdded() override {
+        auto &level = Context::get().level;
+
+        for (int y = 0; y < level.tileheight; ++y) {
+            for (int x = 0; x < level.tilewidth; ++x) {
+                Vector2 coords{x, y};
+
+                if (!level.getRoad(coords) && level.isNextToRoad(coords)) {
+                    auto pos = level.getTileCenterPosition(coords);
+                    b2BodyDef bodydef;
+                    bodydef.position.Set(pos.x, pos.y);
+                    bodydef.type = b2_staticBody;
+                    bodydef.fixedRotation = true;
+                    b2Body *body = world.CreateBody(&bodydef);
+
+                    b2PolygonShape shape;
+                    shape.SetAsBox(Level::tileSpacing * 0.5f, Level::tileSpacing * 0.5f);
+
+                    b2FixtureDef fixturedef;
+                    fixturedef.shape = &shape;
+                    fixturedef.density = 1.0;
+                    body->CreateFixture(&fixturedef);
+                }
+            }
+        }
     }
 
     void onRemoved() override {
@@ -33,7 +57,7 @@ class MovableSystem : public System {
         b2BodyDef bodydef;
         bodydef.position.Set(pos.x, pos.y);
         bodydef.type = b2_dynamicBody;
-        bodydef.linearDamping = 0.0f;
+        bodydef.linearDamping = 10.0f;
         bodydef.fixedRotation = true;
         b2Body *body = world.CreateBody(&bodydef);
 
@@ -106,6 +130,7 @@ class MoveSystem : public System {
 
         auto v = delta * move.speed;
 
+        movable.body->SetLinearDamping(0.0f);
         movable.body->SetLinearVelocity({v.x, v.y});
     }
 
@@ -117,10 +142,13 @@ class MoveSystem : public System {
             move.time += dt;
             auto progress = move.time / move.duration;
             /* entity.position = move.from + (move.to - move.from) * progress; */
+            auto v = movable.body->GetLinearVelocity();
+            entity.rotation = (std::atan2(v.y, v.x) * 180.0f / std::numbers::pi) + 90;
 
             if (progress >= 1) {
 
                 movable.body->SetLinearVelocity({0, 0});
+                movable.body->SetLinearDamping(10.0f);
                 entity.remove<Move>();
             }
         }

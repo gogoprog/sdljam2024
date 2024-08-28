@@ -185,6 +185,18 @@ void Level::reset() {
     }
 }
 
+bool Level::isNextToRoad(const Vector2 &coords) {
+    for (auto &direction : directions) {
+        auto next = coords + direction;
+
+        if (getRoad(next)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Level::render(uint32_t ticks, Renderer &renderer) {
     auto &terrain = renderer.getTerrain("Snd2Watr");
 

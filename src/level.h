@@ -53,6 +53,8 @@ class Level {
         return roadmap[coords];
     }
 
+    bool isNextToRoad(const Vector2 &coords);
+
     void render(uint32_t ticks, Renderer &renderer);
 
     bool findPath(Path &path, const Vector2 &start, const Vector2 &end);
