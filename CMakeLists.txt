@@ -40,6 +40,8 @@ elseif(UNIX)
     PKG_SEARCH_MODULE(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
 endif()
 
+add_subdirectory(deps/box2d-2.4.2 box2d)
+
 include_directories(${SDL2_INCLUDE_DIRS} ${SDL2MIXER_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES} -lbox2d)
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES} box2d)
 
