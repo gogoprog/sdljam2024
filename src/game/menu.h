@@ -27,11 +27,11 @@ class MenuSystem : public System {
         renderer.drawText(Vector2(800, 750), "dedicated to my love : clementine", 1);
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_RETURN)) {
-            Context::get().game.changeState(Game::State::PLAYING);
+            Context::get().engine.changeState(Game::State::PLAYING);
         }
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_E)) {
-            Context::get().game.changeState(Game::State::EDITOR);
+            Context::get().engine.changeState(Game::State::EDITOR);
         }
     }
 

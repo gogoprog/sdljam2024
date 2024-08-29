@@ -15,11 +15,12 @@ struct Stats {
 
 class Game {
   public:
-    enum class State {
+    enum State {
         INITIATING,
         MENU,
         EDITOR,
         PLAYING,
+        BUILDING,
         WINNING,
         LOSING,
     };
@@ -29,7 +30,6 @@ class Game {
 
     void init();
     void reset();
-    void changeState(const State state);
 
     Stats stats;
 

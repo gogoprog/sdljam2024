@@ -35,7 +35,7 @@ class EditorSystem : public System {
         }
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
-            Context::get().game.changeState(Game::State::MENU);
+            Context::get().engine.changeState(Game::State::MENU);
         }
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_W)) {

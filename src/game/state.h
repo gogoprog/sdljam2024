@@ -93,7 +93,7 @@ class BuildingTurretsStateSystem : public System {
         timeLeft -= dt;
 
         if (timeLeft < 0 || inputs.isKeyJustPressed(SDL_SCANCODE_SPACE)) {
-            game.changeState(Game::State::PLAYING);
+            engine->changeState(Game::State::PLAYING);
         } else {
             String msg;
             msg = "incoming wave in ";

@@ -42,7 +42,7 @@ class PlayingSystem : public System {
         auto &inputs = Context::get().inputs;
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
-            Context::get().game.changeState(Game::State::MENU);
+            Context::get().engine.changeState(Game::State::MENU);
         }
     }
 };

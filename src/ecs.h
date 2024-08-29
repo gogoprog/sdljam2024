@@ -10,6 +10,11 @@ struct Component {};
 class Engine;
 class System;
 
+template <typename T> bool contains(Vector<T> &vector, const T &value) {
+    auto it = std::find(vector.begin(), vector.end(), value);
+    return it != vector.end();
+}
+
 class Entity {
     friend class Engine;
     friend class System;
@@ -80,7 +85,7 @@ class Engine {
     friend class System;
 
   public:
-    template <typename T> void enableSystem() {
+    template <typename T> void enableSystem(bool global = true) {
         System *value = nullptr;
         for (auto system : allSystems) {
             if (typeid(*system) == typeid(T)) {
@@ -91,6 +96,10 @@ class Engine {
         if (value == nullptr) {
             value = new T;
             allSystems.push_back(value);
+
+            if (global) {
+                globalSystems.push_back(typeid(*value));
+            }
         }
 
         addSystem(value);
@@ -107,6 +116,30 @@ class Engine {
         if (value == nullptr) {
             value = new T;
             allSystems.push_back(value);
+        }
+
+        removeSystem(value);
+    }
+
+    void enableSystem(TypeIndex t) {
+        printf("Enabling system: %i \n", t.hash_code());
+        System *value = nullptr;
+        for (auto system : allSystems) {
+            if (typeid(*system) == t) {
+                value = system;
+            }
+        }
+
+        addSystem(value);
+    }
+
+    void disableSystem(TypeIndex t) {
+        printf("Disabling system: %i \n", t.hash_code());
+        System *value = nullptr;
+        for (auto system : allSystems) {
+            if (typeid(*system) == t) {
+                value = system;
+            }
         }
 
         removeSystem(value);
@@ -170,6 +203,42 @@ class Engine {
         systems.clear();
     }
 
+    template <typename... T> void setState(int state) {
+        (
+            [&] {
+                System *value = nullptr;
+
+                for (auto system : allSystems) {
+                    if (typeid(*system) == typeid(T)) {
+                        value = system;
+                    }
+                }
+
+                if (value == nullptr) {
+                    value = new T;
+                    allSystems.push_back(value);
+                }
+
+                stateSystems[state].push_back(typeid(T));
+            }(),
+            ...);
+    }
+
+    void changeState(int state) {
+        auto &stateSystems = this->stateSystems[state];
+
+        for (auto system : systems) {
+            auto ti = TypeIndex(typeid(*system));
+            if (!contains(stateSystems, ti) && !contains(globalSystems, ti)) {
+                disableSystem(ti);
+            }
+        }
+
+        for (auto system_ti : stateSystems) {
+            enableSystem(system_ti);
+        }
+    }
+
   private:
     void addSystem(System *system) {
         auto it = std::find(systems.begin(), systems.end(), system);
@@ -193,6 +262,8 @@ class Engine {
     Vector<System *> systems;
     Vector<System *> allSystems;
     Vector<Entity::Ptr> entities;
+    Vector<TypeIndex> globalSystems;
+    Map<int, Vector<TypeIndex>> stateSystems;
 };
 
 inline void Entity::notifyAdd(const TypeIndex component_name) {
