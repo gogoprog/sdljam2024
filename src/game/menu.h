@@ -37,8 +37,12 @@ class MenuSystem : public System {
 
     void updateSingle(const float dt, Entity &entity) override {
         time += dt;
+        auto &level = Context::get().level;
+        auto &renderer = Context::get().renderer;
+        auto move = 100;
+        auto origin = Vector2(level.width - renderer.width, level.height - renderer.height) * 0.5f;
 
-        entity.position = Vector2(std::sin(time) * 200, std::cos(time) * 200);
+        entity.position = origin + Vector2(std::sin(time) * move, std::cos(time) * move);
     }
 
   private:

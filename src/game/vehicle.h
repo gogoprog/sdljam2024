@@ -100,9 +100,19 @@ class VehicleTargetPositionSystem : public System {
                     } else if (vehicle.path.size() == 0) {
                         entity.remove<TargetPosition>();
                     }
+
                 } else {
                     entity.remove<TargetPosition>();
                 }
+            }
+        }
+
+        if (Context::get().inputs.isKeyPressed(SDL_SCANCODE_F1)) {
+            for (int i = 1; i < vehicle.path.size(); ++i) {
+                auto from = level.getTileCenterPosition(vehicle.path[i - 1]);
+                auto to = level.getTileCenterPosition(vehicle.path[i]);
+
+                Context::get().renderer.drawLine(from, to, 0, 0, 200, true);
             }
         }
     }

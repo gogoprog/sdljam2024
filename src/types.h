@@ -60,6 +60,12 @@ class Vector2 {
         return {x / len, y / len};
     }
 
+    Vector2 &operator-=(const Vector2 &other) {
+        x -= other.x;
+        y -= other.y;
+        return *this;
+    }
+
     static float getSquareDistance(const Vector2 &v1, const Vector2 &v2) {
         auto dx = v2.x - v1.x;
         auto dy = v2.y - v1.y;

@@ -551,6 +551,21 @@ void Renderer::drawQuad(const Vector2 &pos, const Vector2 &size, const int r, co
     SDL_RenderDrawRect(pimpl->renderer, &rect);
 }
 
+void Renderer::drawLine(const Vector2 &pos, const Vector2 &pos2, const int r, const int g, const int b,
+                        const bool use_camera) {
+    SDL_SetRenderDrawColor(pimpl->renderer, r, g, b, 255);
+
+    auto from = pos;
+    auto to = pos2;
+
+    if (use_camera) {
+        from -= pimpl->cameraPosition;
+        to -= pimpl->cameraPosition;
+    }
+
+    SDL_RenderDrawLine(pimpl->renderer, from.x, from.y, to.x, to.y);
+}
+
 void Renderer::setPivot(const std::string &name, const int frameindex, const Vector2 &pivot) {
     auto &atlas = pimpl->atlases[name];
     auto &frame = atlas.frames[frameindex];

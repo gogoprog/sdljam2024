@@ -79,6 +79,7 @@ class Renderer {
 
     void drawFilledQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b, const float alpha = 1.0f, const bool use_camera = false);
     void drawQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b, const bool use_camera = false);
+    void drawLine(const Vector2 &pos, const Vector2 &pos2, const int r, const int g, const int b, const bool use_camera = false);
 
     void setPivot(const std::string &name, const int frameindex, const Vector2 &pivot);
     int getFramesCount(const std::string &name) const;

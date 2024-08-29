@@ -68,6 +68,22 @@ class HudSystem : public System {
             }
 
             renderer.drawQuad(camera, dimensions, 10, 10, 10);
+
+            if (inputs.isMousePressed(1)) {
+                if (mouse_position.x > origin.x && mouse_position.x < origin.x + minimapSize &&
+                    mouse_position.y > origin.y && mouse_position.y < origin.y + minimapSize) {
+
+                    auto dx = (mouse_position.x - origin.x) / minimapSize;
+                    auto dy = (mouse_position.y - origin.y) / minimapSize;
+
+                    auto & campos = Context::get().cameraEntity->position;
+
+                    campos.x = level.width * dx - renderer.width * 0.5;
+                    campos.y = level.height * dy - renderer.height * 0.5;
+
+                    printf("%.2f, %.2f\n", campos.x, campos.y);
+                }
+            }
         }
     }
 };

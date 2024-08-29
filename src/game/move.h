@@ -31,15 +31,20 @@ class MovableSystem : public System {
                     bodydef.position.Set(pos.x, pos.y);
                     bodydef.type = b2_staticBody;
                     bodydef.fixedRotation = true;
+                    bodydef.angle = std::numbers::pi / 4.0f;
                     b2Body *body = world.CreateBody(&bodydef);
 
                     b2PolygonShape shape;
-                    shape.SetAsBox(Level::tileSpacing * 0.5f, Level::tileSpacing * 0.5f);
+
+                    auto size = Level::tileSpacing * 0.25f;
+                    shape.SetAsBox(size, size);
 
                     b2FixtureDef fixturedef;
                     fixturedef.shape = &shape;
                     fixturedef.density = 1.0;
                     body->CreateFixture(&fixturedef);
+
+                    /* body->SetTransform(body->GetPosition(), std::numbers::pi / 4.0f); */
                 }
             }
         }
