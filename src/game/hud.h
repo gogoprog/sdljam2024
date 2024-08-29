@@ -80,8 +80,6 @@ class HudSystem : public System {
 
                     campos.x = level.width * dx - renderer.width * 0.5;
                     campos.y = level.height * dy - renderer.height * 0.5;
-
-                    printf("%.2f, %.2f\n", campos.x, campos.y);
                 }
             }
         }
