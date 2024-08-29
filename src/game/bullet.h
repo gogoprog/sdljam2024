@@ -29,15 +29,15 @@ class BulletSystem : public System {
             return;
         }
 
-        engine->iterate<Hittable>([&](Entity &other_entity) {
-            auto delta = other_entity.position - entity.position;
+        engine->iterate<Hittable>([&](Entity::Ptr &other_entity) {
+            auto delta = other_entity->position - entity.position;
 
             if (delta.getSquareLength() < 24 * 24) {
                 auto e = Factory::createSmallExplosion();
                 e->position = entity.position;
                 engine->addEntity(e);
 
-                other_entity.get<Life>().hp -= bullet.damage;
+                other_entity->get<Life>().hp -= bullet.damage;
                 engine->removeEntity(entity);
 
                 Context::get().audio.playSound("impact");

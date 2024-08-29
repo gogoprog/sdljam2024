@@ -121,8 +121,17 @@ class Engine {
         removeSystem(value);
     }
 
+    template <typename T> T &getSystem() {
+        for (auto system : allSystems) {
+            if (typeid(*system) == typeid(T)) {
+                return *system;
+            }
+        }
+
+        return nullptr;
+    }
+
     void enableSystem(TypeIndex t) {
-        printf("Enabling system: %i \n", t.hash_code());
         System *value = nullptr;
         for (auto system : allSystems) {
             if (typeid(*system) == t) {
@@ -134,7 +143,6 @@ class Engine {
     }
 
     void disableSystem(TypeIndex t) {
-        printf("Disabling system: %i \n", t.hash_code());
         System *value = nullptr;
         for (auto system : allSystems) {
             if (typeid(*system) == t) {
@@ -182,13 +190,13 @@ class Engine {
         }
     }
 
-    template <typename T> void iterate(std::function<bool(Entity &entity)> func) {
+    template <typename T> void iterate(std::function<bool(Entity::Ptr &entity)> func) {
         auto entities_copy = entities;
         for (auto &entityptr : entities_copy) {
             auto &entity = *entityptr;
 
             if (entity.has<T>()) {
-                if (!func(entity)) {
+                if (!func(entityptr)) {
                     break;
                 }
             }

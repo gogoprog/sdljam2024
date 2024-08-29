@@ -131,11 +131,11 @@ class BuildingTurretsStateSystem : public System {
                 Entity *hover_entity{nullptr};
 
                 engine->iterate<Turret>([&](auto &e) {
-                    auto delta = e.position - Vector2{position.x + 32, position.y + 32};
+                    auto delta = e->position - Vector2{position.x + 32, position.y + 32};
                     auto length = delta.getLength();
 
                     if (length < 64) {
-                        hover_entity = &e;
+                        hover_entity = &*e;
                     }
 
                     return true;

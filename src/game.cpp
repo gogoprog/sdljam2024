@@ -26,7 +26,7 @@ void Game::init() {
 
     engine.enableSystem<TurretSystem>();
     engine.enableSystem<VehicleSystem>();
-    engine.enableSystem<VehicleTargetPositionSystem>();
+    engine.enableSystem<VehicleTargetSystem>();
     engine.enableSystem<WeaponSystem>();
     engine.enableSystem<BulletSystem>();
     engine.enableSystem<LifeSystem>();
@@ -76,6 +76,7 @@ void Game::init() {
         engine.setState<MenuSystem>(State::MENU);
         engine.setState<EditorSystem>(State::EDITOR);
         engine.setState<PlayingSystem, HudSystem, VehicleSelectSystem, VehicleSelectedSystem>(State::PLAYING);
+        engine.setState<PlayingSystem, HudSystem>(State::BUILDING);
     }
 
     engine.changeState(State::MENU);

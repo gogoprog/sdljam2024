@@ -237,7 +237,7 @@ bool Level::isNextToRoad(const Vector2 &coords) {
     for (auto &direction : directions) {
         auto next = coords + direction;
 
-        if (getRoad(next)) {
+        if (isRoad(next)) {
             return true;
         }
     }
@@ -329,7 +329,7 @@ bool Level::findPath(Path &path, const Vector2 &start, const Vector2 &end) {
                 for (auto &direction : directions) {
                     auto next = last + direction;
 
-                    if (getRoad(next) && !locks[next]) {
+                    if (isRoad(next) && !locks[next]) {
                         if (std::find(node.path.begin(), node.path.end(), next) == node.path.end()) {
                             auto copy = node;
                             copy.path.push_back(next);
@@ -403,42 +403,42 @@ void Level::updateCache(const Vector2 &from, const Vector2 &to) {
             Vector2 pos{x, y};
             int type = Tile::FILL;
 
-            if (getRoad(pos)) {
+            if (isRoad(pos)) {
                 type = Tile::FILL2;
             } else {
 
-                if (getRoad({x + 1, y + 1})) {
+                if (isRoad({x + 1, y + 1})) {
                     type = Tile::CORNER4;
                 }
-                if (getRoad({x - 1, y + 1})) {
+                if (isRoad({x - 1, y + 1})) {
                     type = Tile::CORNER3;
                 }
-                if (getRoad({x - 1, y - 1})) {
+                if (isRoad({x - 1, y - 1})) {
                     type = Tile::CORNER1;
                 }
-                if (getRoad({x + 1, y - 1})) {
+                if (isRoad({x + 1, y - 1})) {
                     type = Tile::CORNER2;
                 }
 
-                if (getRoad({x + 1, y})) {
+                if (isRoad({x + 1, y})) {
                     type = Tile::E;
 
-                    if (getRoad({x, y + 1})) {
+                    if (isRoad({x, y + 1})) {
                         type = Tile::SE;
-                    } else if (getRoad({x, y - 1})) {
+                    } else if (isRoad({x, y - 1})) {
                         type = Tile::NE;
                     }
-                } else if (getRoad({x - 1, y})) {
+                } else if (isRoad({x - 1, y})) {
                     type = Tile::W;
 
-                    if (getRoad({x, y + 1})) {
+                    if (isRoad({x, y + 1})) {
                         type = Tile::SW;
-                    } else if (getRoad({x, y - 1})) {
+                    } else if (isRoad({x, y - 1})) {
                         type = Tile::NW;
                     }
-                } else if (getRoad({x, y - 1})) {
+                } else if (isRoad({x, y - 1})) {
                     type = Tile::N;
-                } else if (getRoad({x, y + 1})) {
+                } else if (isRoad({x, y + 1})) {
                     type = Tile::S;
                 }
             }

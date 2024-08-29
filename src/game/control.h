@@ -72,7 +72,6 @@ class VehicleSelectSystem : public System {
         applySelection = false;
 
         if (!selecting && inputs.isMouseJustPressed(1)) {
-            /* startMousePosition = Context::get().getMouseWorldPosition(); */
             startMousePosition = inputs.getMousePosition();
             endMousePosition = inputs.getMousePosition();
             selecting = true;
@@ -84,8 +83,6 @@ class VehicleSelectSystem : public System {
             endMousePosition = inputs.getMousePosition();
 
             if (inputs.isMouseJustReleased(1)) {
-                /* endMousePosition = Context::get().getMouseWorldPosition(); */
-
                 endMousePosition = inputs.getMousePosition();
                 selecting = false;
                 applySelection = true;
@@ -132,22 +129,39 @@ class VehicleSelectedSystem : public System {
     bool applySelection = false;
     Vector2 startMousePosition;
     Vector2 endMousePosition;
+    Entity::Ptr clickedEntity;
 
     void update(const float dt) override {
         auto &inputs = Context::get().inputs;
         auto &level = Context::get().level;
 
-        System::update(dt);
+        clickedEntity = nullptr;
 
         if (inputs.isMouseJustPressed(3)) {
             auto pos = Context::get().getMouseWorldPosition();
             auto coords = level.getTileCoords(pos);
-            auto rpos = level.getTileCenterPosition(coords);
 
-            auto e = Factory::createSelectFx();
-            e->position = rpos;
-            engine->addEntity(e);
+            engine->iterate<Vehicle>([&](auto &e) {
+                auto dist = Vector2::getSquareDistance(pos, e->position);
+
+                if (dist < 20 * 20) {
+                    clickedEntity = e;
+
+                    puts("tup");
+                }
+                return true;
+            });
+
+            if (level.isRoad(coords)) {
+                auto rpos = level.getTileCenterPosition(coords);
+
+                auto e = Factory::createSelectFx();
+                e->position = rpos;
+                engine->addEntity(e);
+            }
         }
+
+        System::update(dt);
     }
 
     void updateSingle(const float dt, Entity &entity) override {
@@ -166,19 +180,27 @@ class VehicleSelectedSystem : public System {
         if (inputs.isMouseJustPressed(3)) {
             auto pos = Context::get().getMouseWorldPosition();
             auto coords = level.getTileCoords(pos);
-            if(!entity.has<TargetPosition>())
-            {
-                entity.add<TargetPosition>();
+
+            if (level.isRoad(coords)) {
+                if (!entity.has<Target>()) {
+                    entity.add<Target>();
+                }
+
+                if (clickedEntity == nullptr) {
+                    entity.get<Target>().tileCoords = coords;
+                    entity.get<Target>().entity = nullptr;
+                } else {
+                    entity.get<Target>().entity = clickedEntity;
+                }
             }
-            entity.get<TargetPosition>().position = coords;
         }
 
         const int size = 42;
 
         renderer.drawQuad(pos - Vector2{size, size} / 2, {size, size}, 255, 255, 255, true);
 
-        if (entity.has<TargetPosition>()) {
-            auto rtarget = level.getTileCenterPosition(entity.get<TargetPosition>().position);
+        if (entity.has<Target>()) {
+            auto rtarget = level.getTileCenterPosition(entity.get<Target>().tileCoords);
             renderer.draw(rtarget, "Cursor1", true);
         }
     }

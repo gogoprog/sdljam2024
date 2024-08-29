@@ -49,7 +49,7 @@ class Level {
         invalidatePathCache();
     }
 
-    inline bool getRoad(const Vector2 &coords) {
+    inline bool isRoad(const Vector2 &coords) {
         return roadmap[coords];
     }
 

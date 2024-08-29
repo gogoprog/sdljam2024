@@ -25,7 +25,7 @@ class MovableSystem : public System {
             for (int x = 0; x < level.tilewidth; ++x) {
                 Vector2 coords{x, y};
 
-                if (!level.getRoad(coords) && level.isNextToRoad(coords)) {
+                if (!level.isRoad(coords) && level.isNextToRoad(coords)) {
                     auto pos = level.getTileCenterPosition(coords);
                     b2BodyDef bodydef;
                     bodydef.position.Set(pos.x, pos.y);

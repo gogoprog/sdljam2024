@@ -39,7 +39,7 @@ class HudSystem : public System {
             float ratio = level.width / (float)minimapSize;
 
             engine->iterate<Flag>([&](auto &e) {
-                renderer.drawFilledQuad(origin + e.position / ratio, {2, 4}, 100, 0, 0);
+                renderer.drawFilledQuad(origin + e->position / ratio, {2, 4}, 100, 0, 0);
                 return true;
             });
 

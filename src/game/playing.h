@@ -34,12 +34,16 @@ class PlayingSystem : public System {
             e->get<Sprite>().g = 12;
             e->get<Sprite>().b = 12;
             engine->addEntity(e);
-            e->add<TargetPosition>().position = level.startCoords[1];
+            e->add<Target>().tileCoords = level.startCoords[1];
         }
     }
 
     void update(const float dt) override {
         auto &inputs = Context::get().inputs;
+
+        if (inputs.isKeyJustPressed(SDL_SCANCODE_1)) {
+            Context::get().engine.changeState(Game::State::BUILDING);
+        }
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
             Context::get().engine.changeState(Game::State::MENU);

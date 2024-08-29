@@ -4,12 +4,9 @@
 #include "move.h"
 #include "weapon.h"
 
-struct TargetPosition : public Component {
-    Vector2 position;
-};
-
-struct TargetEntity : public Component {
-    Entity::Ptr entity;
+struct Target : public Component {
+    Vector2 tileCoords;
+    Entity::Ptr entity{nullptr};
 };
 
 struct Vehicle : public Component {
@@ -36,7 +33,7 @@ class VehicleSystem : public System {
         auto &vehicle = entity.get<Vehicle>();
         auto &life = entity.get<Life>();
 
-        if (!entity.has<TargetPosition>() && !entity.has<Move>()) {
+        if (!entity.has<Target>() && !entity.has<Move>()) {
             Entity::Ptr closest = nullptr;
             float closest_distance = std::numeric_limits<float>::max();
 
@@ -65,12 +62,12 @@ class VehicleSystem : public System {
     }
 };
 
-class VehicleTargetPositionSystem : public System {
+class VehicleTargetSystem : public System {
   public:
-    VehicleTargetPositionSystem() {
+    VehicleTargetSystem() {
         require<Vehicle>();
         require<Movable>();
-        require<TargetPosition>();
+        require<Target>();
     }
 
     void onEntityAdded(Entity &entity) override {
@@ -82,7 +79,15 @@ class VehicleTargetPositionSystem : public System {
         auto &level = Context::get().level;
         auto &game = Context::get().game;
         auto &vehicle = entity.get<Vehicle>();
-        auto &target = entity.get<TargetPosition>();
+        auto &target = entity.get<Target>();
+
+        Vector2 target_coords;
+
+        if (target.entity != nullptr) {
+            target_coords = level.getTileCoords(target.entity->position);
+        } else {
+            target_coords = target.tileCoords;
+        }
 
         if (!entity.has<Move>()) {
 
@@ -90,19 +95,19 @@ class VehicleTargetPositionSystem : public System {
 
             auto start_coords = level.getTileCoords(entity.position);
 
-            if (start_coords == target.position) {
-                entity.remove<TargetPosition>();
+            if (start_coords == target_coords) {
+                entity.remove<Target>();
             } else {
-                if (level.findPath(vehicle.path, start_coords, target.position)) {
+                if (level.findPath(vehicle.path, start_coords, target_coords)) {
                     if (vehicle.path.size() > 1) {
                         auto position = level.getTileCenterPosition(vehicle.path[1]);
                         entity.add<Move>(entity.position, position, vehicle.speed);
                     } else if (vehicle.path.size() == 0) {
-                        entity.remove<TargetPosition>();
+                        entity.remove<Target>();
                     }
 
                 } else {
-                    entity.remove<TargetPosition>();
+                    entity.remove<Target>();
                 }
             }
         }
