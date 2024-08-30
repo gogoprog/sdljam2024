@@ -68,6 +68,7 @@ class System {
 
     virtual void update(const float dt);
     virtual void onEntityAdded(Entity &entity){};
+    virtual void onEntityRemoved(Entity &entity){};
     virtual void updateSingle(const float dt, Entity &entity){};
 
     template <typename T> void require() {
@@ -124,7 +125,7 @@ class Engine {
     template <typename T> T &getSystem() {
         for (auto system : allSystems) {
             if (typeid(*system) == typeid(T)) {
-                return static_cast<T&>(*system);
+                return static_cast<T &>(*system);
             }
         }
 
@@ -163,6 +164,10 @@ class Engine {
     }
 
     void removeEntity(Entity &entity) {
+        for (auto &kv : entity.components) {
+            notifyRemove(entity, kv.first);
+        }
+
         auto end_it = std::remove_if(entities.begin(), entities.end(), [&](auto &se) { return &*se == &entity; });
         entities.resize(end_it - entities.begin());
     }
@@ -185,6 +190,22 @@ class Engine {
                         return it != entity.components.end();
                     })) {
                     system->onEntityAdded(entity);
+                }
+            }
+        }
+    }
+
+    void notifyRemove(Entity &entity, const TypeIndex component_name) {
+        for (auto &system : systems) {
+            if (std::find(system->requiredComponents.begin(), system->requiredComponents.end(), component_name) !=
+                system->requiredComponents.end()) {
+
+                if (std::all_of(system->requiredComponents.begin(), system->requiredComponents.end(), [&](auto name) {
+                        auto it = std::find_if(entity.components.begin(), entity.components.end(),
+                                               [&](auto &kv) { return kv.first == name; });
+                        return it != entity.components.end();
+                    })) {
+                    system->onEntityRemoved(entity);
                 }
             }
         }

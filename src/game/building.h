@@ -2,9 +2,11 @@
 
 #include "../context.h"
 #include "factory.h"
+#include "life.h"
 
 struct Structure : public Component {
     bool needCanon = false;
+    Entity::Ptr canon;
 };
 
 class BuildingSystem : public System {
@@ -88,9 +90,23 @@ class StructureSystem : public System {
 
         if (structure.needCanon) {
             auto e = Factory::createTurret();
+            e->add<Life>().team = entity.get<Life>().team;
             e->position = entity.position;
             engine->addEntity(e);
+            structure.canon = e;
         }
+    }
+
+    void onEntityRemoved(Entity &entity) override {
+        auto &structure = entity.get<Structure>();
+
+        if (structure.canon != nullptr) {
+            engine->removeEntity(*structure.canon);
+        }
+
+        auto &level = Context::get().level;
+        auto tile_coords = level.getTileCoords(entity.position);
+        level.unlock2x2(tile_coords);
     }
 
     void updateSingle(const float dt, Entity &entity) override {

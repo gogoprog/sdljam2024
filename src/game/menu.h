@@ -33,6 +33,7 @@ class MenuSystem : public System {
         for (auto e : buttons) {
             engine->removeEntity(*e);
         }
+        buttons.clear();
     }
 
     void update(const float dt) override {
@@ -81,6 +82,21 @@ class PauseSystem : public System {
     }
 
     void onAdded() override {
+        auto &renderer = Context::get().renderer;
+        {
+            auto e = Factory::createButton("resume", []() { Context::get().engine.changeState(Game::State::PLAYING); });
+            e->get<Button>().scale = 2.0f;
+            e->position = {renderer.width / 2, 350};
+            buttons.push_back(e);
+            engine->addEntity(e);
+        }
+    }
+
+    void onRemoved() override {
+        for (auto e : buttons) {
+            engine->removeEntity(*e);
+        }
+        buttons.clear();
     }
 
     void update(const float dt) override {
@@ -91,9 +107,10 @@ class PauseSystem : public System {
         auto &renderer = Context::get().renderer;
         auto world_position = Context::get().getMouseWorldPosition();
 
-        renderer.drawCenteredText(80, "island war", 5, false, 0.5f);
+        auto size = 800;
+        renderer.drawFilledQuad(Vector2{renderer.width / 2 - size / 2, 50}, Vector2{size, 700}, 20, 20, 20, 0.9, false);
 
-        renderer.drawCenteredText(300, "resume", 2);
+        renderer.drawCenteredText(80, "island war", 5, false, 0.5f);
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
             Context::get().engine.changeState(Game::State::PLAYING);
@@ -101,4 +118,5 @@ class PauseSystem : public System {
     }
 
   private:
+    Vector<Entity::Ptr> buttons;
 };

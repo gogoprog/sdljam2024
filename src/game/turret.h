@@ -38,11 +38,12 @@ class TurretSystem : public System {
         auto &turret = entity.get<Turret>();
         auto &rotatable = entity.get<RotatableSprite>();
         auto &stat = turretStats[turret.level];
+        auto &life = entity.get<Life>();
 
         if (turret.timeSinceLastFire > stat.interval && turret.mustFire) {
             turret.timeSinceLastFire = 0;
             auto e = Factory::createBullet(entity, stat.range, stat.damage);
-            Context::get().engine.addEntity(e);
+            engine->addEntity(e);
             turret.mustFire = false;
 
             Context::get().audio.playSound("firing");
@@ -56,9 +57,32 @@ class TurretSystem : public System {
             rotatable.frameOffset = 0;
         }
 
-        auto pos = entity.position;
-        pos.y -= 32;
-        pos.x -= 32;
-        renderer.drawText(pos, std::to_string(turret.level).c_str(), 0.6, true, true);
+        Entity::Ptr closest = nullptr;
+        float closest_distance = std::numeric_limits<float>::max();
+
+        engine->iterate<Life>([&](Entity::Ptr &other) {
+            if (other.get() != &entity) {
+                auto &other_life = other->get<Life>();
+
+                if (other_life.team != life.team) {
+                    auto distance = Vector2::getSquareDistance(entity.position, other->position);
+
+                    if (distance < closest_distance) {
+                        closest = other;
+                        closest_distance = distance;
+                    }
+                }
+            }
+            return true;
+        });
+
+        if (closest != nullptr) {
+            auto delta = closest->position - entity.position;
+            entity.rotation = (std::atan2(delta.y, delta.x) * 180.0f / std::numbers::pi) + 90;
+
+            if (closest_distance < stat.range * stat.range) {
+                turret.mustFire = true;
+            }
+        }
     }
 };

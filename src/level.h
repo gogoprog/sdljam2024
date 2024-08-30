@@ -49,6 +49,14 @@ class Level {
         invalidatePathCache();
     }
 
+    void unlock2x2(const Vector2 &coords) {
+        locks[coords] = false;
+        locks[{coords.x - 1, coords.y}] = false;
+        locks[{coords.x - 1, coords.y - 1}] = false;
+        locks[{coords.x, coords.y - 1}] = false;
+        invalidatePathCache();
+    }
+
     inline bool isRoad(const Vector2 &coords) {
         return roadmap[coords];
     }
