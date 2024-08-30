@@ -77,6 +77,13 @@ class StructureSystem : public System {
     }
 
     void onEntityAdded(Entity &entity) override {
+        auto &structure = entity.get<Structure>();
+
+        if (structure.needCanon) {
+            auto e = Factory::createTurret();
+            e->position = entity.position;
+            engine->addEntity(e);
+        }
     }
 
     void updateSingle(const float dt, Entity &entity) override {

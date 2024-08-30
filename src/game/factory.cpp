@@ -1,6 +1,7 @@
 #include "factory.h"
 
 #include "animation.h"
+#include "building.h"
 #include "bullet.h"
 #include "camera.h"
 #include "control.h"
@@ -40,6 +41,7 @@ SharedPtr<Entity> Factory::createTurret() {
     e->add<Sprite>();
     e->get<Sprite>().atlasName = "Turret";
     e->get<Sprite>().frameIndex = 2;
+    e->get<Sprite>().layer = 2;
     e->add<RotatableSprite>();
     /* e->get<RotatableSprite>().frames = std::span(turret_frames); */
     e->get<RotatableSprite>().frames = Vector<int>{turret_frames.begin(), turret_frames.end()};
@@ -53,7 +55,7 @@ SharedPtr<Entity> Factory::createBullet(const Entity &source, float range, float
     e->add<Sprite>();
     e->get<Sprite>().atlasName = "Bullets";
     e->get<Sprite>().frameIndex = 0;
-    e->get<Sprite>().layer = 2;
+    e->get<Sprite>().layer = 4;
     e->add<RotatableSprite>();
     /* e->get<RotatableSprite>().frames = std::span(bullet_frames); */
     e->get<RotatableSprite>().frames = Vector<int>{bullet_frames.begin(), bullet_frames.end()};
@@ -146,6 +148,7 @@ SharedPtr<Entity> Factory::createSelectFx() {
 Entity::Ptr Factory::createStructure(const StructureType type) {
     auto e = std::make_shared<Entity>();
 
+    e->add<Structure>();
     e->add<Life>();
     e->add<Hittable>();
     e->get<Hittable>().radius = 56;
@@ -156,6 +159,7 @@ Entity::Ptr Factory::createStructure(const StructureType type) {
         case StructureType::Turret: {
             e->get<Sprite>().atlasName = "Turret";
             e->get<Sprite>().frameIndex = 0;
+            e->get<Structure>().needCanon = true;
         } break;
         case StructureType::Generator: {
             e->get<Sprite>().atlasName = "Generator";

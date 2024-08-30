@@ -27,6 +27,7 @@ void Game::init() {
     engine.enableSystem<VehicleSystem>();
     engine.enableSystem<VehicleTargetSystem>();
     engine.enableSystem<WeaponSystem>();
+    engine.enableSystem<StructureSystem>();
     engine.enableSystem<BulletSystem>();
     engine.enableSystem<LifeSystem>();
     engine.enableSystem<MoveSystem>();
