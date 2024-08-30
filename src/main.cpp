@@ -73,7 +73,7 @@ void loop() {
         }
     };
 
-    viewer("Generator");
+    /* viewer("Generator"); */
 
     renderer.update(current_ticks);
 }

@@ -74,8 +74,9 @@ void Game::init() {
     {
         engine.setState<MenuSystem>(State::MENU);
         engine.setState<EditorSystem>(State::EDITOR);
-        engine.setState<PlayingSystem, HudSystem, VehicleSelectSystem, VehicleSelectedSystem>(State::PLAYING);
-        engine.setState<PlayingSystem, HudSystem, BuildingSystem>(State::BUILDING);
+        engine.setState<MissionSystem, PlayingSystem, HudSystem, VehicleSelectSystem, VehicleSelectedSystem>(
+            State::PLAYING);
+        engine.setState<MissionSystem, HudSystem, BuildingSystem>(State::BUILDING);
     }
 
     engine.changeState(State::MENU);

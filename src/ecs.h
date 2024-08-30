@@ -124,11 +124,11 @@ class Engine {
     template <typename T> T &getSystem() {
         for (auto system : allSystems) {
             if (typeid(*system) == typeid(T)) {
-                return *system;
+                return static_cast<T&>(*system);
             }
         }
 
-        return nullptr;
+        return *(new T);
     }
 
     void enableSystem(TypeIndex t) {

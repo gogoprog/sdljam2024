@@ -1,12 +1,13 @@
 #pragma once
 
 #include "../context.h"
+#include "building.h"
 #include "control.h"
 #include "factory.h"
 
-class PlayingSystem : public System {
+class MissionSystem : public System {
   public:
-    PlayingSystem() {
+    MissionSystem() {
     }
 
     void onAdded() override {
@@ -37,12 +38,27 @@ class PlayingSystem : public System {
             e->add<Target>().tileCoords = level.startCoords[1];
         }
     }
+};
+
+class PlayingSystem : public System {
+  public:
+    PlayingSystem() {
+    }
+
+    void onAdded() override {
+    }
 
     void update(const float dt) override {
         auto &inputs = Context::get().inputs;
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_1)) {
-            Context::get().engine.changeState(Game::State::BUILDING);
+            engine->changeState(Game::State::BUILDING);
+            engine->getSystem<BuildingSystem>().typeToBuild = StructureType::Turret;
+        }
+
+        if (inputs.isKeyJustPressed(SDL_SCANCODE_2)) {
+            engine->changeState(Game::State::BUILDING);
+            engine->getSystem<BuildingSystem>().typeToBuild = StructureType::Generator;
         }
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {

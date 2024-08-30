@@ -3,8 +3,13 @@
 #include "../context.h"
 #include "factory.h"
 
+struct Structure : public Component {
+    bool needCanon = false;
+};
+
 class BuildingSystem : public System {
   public:
+    StructureType typeToBuild;
     BuildingSystem() {
     }
 
@@ -16,7 +21,21 @@ class BuildingSystem : public System {
         auto &level = Context::get().level;
         auto &renderer = Context::get().renderer;
         auto &game = Context::get().game;
-        auto &atlas = renderer.getAtlas("Turret");
+        String str;
+        switch (typeToBuild) {
+
+            case StructureType::Turret: {
+                str = "Turret";
+            } break;
+            case StructureType::Generator: {
+                str = "Generator";
+            } break;
+            case StructureType::TankFactory: {
+
+            } break;
+        }
+
+        auto &atlas = renderer.getAtlas(str);
         auto world_position = Context::get().getMouseWorldPosition();
 
         auto tile_coords = level.getTileCoords(world_position);
@@ -29,13 +48,7 @@ class BuildingSystem : public System {
             if (inputs.isMouseJustPressed(1)) {
                 if (game.stats.money >= game.turretCost) {
                     {
-                        auto e = Factory::createBase();
-                        e->position = position;
-                        engine->addEntity(e);
-                    }
-
-                    {
-                        auto e = Factory::createTurret();
+                        auto e = Factory::createStructure(typeToBuild);
                         e->position = position;
                         engine->addEntity(e);
                     }
@@ -55,4 +68,17 @@ class BuildingSystem : public System {
 
   private:
     float timeLeft;
+};
+
+class StructureSystem : public System {
+  public:
+    StructureSystem() {
+        require<Structure>();
+    }
+
+    void onEntityAdded(Entity &entity) override {
+    }
+
+    void updateSingle(const float dt, Entity &entity) override {
+    }
 };

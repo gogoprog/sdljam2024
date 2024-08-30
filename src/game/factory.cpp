@@ -141,3 +141,24 @@ SharedPtr<Entity> Factory::createSelectFx() {
     e->add<SelectFx>();
     return e;
 }
+
+Entity::Ptr Factory::createStructure(const StructureType type) {
+    auto e = std::make_shared<Entity>();
+    e->add<Sprite>();
+
+    switch (type) {
+        case StructureType::Turret: {
+            e->get<Sprite>().atlasName = "Turret";
+            e->get<Sprite>().frameIndex = 0;
+        } break;
+        case StructureType::Generator: {
+            e->get<Sprite>().atlasName = "Generator";
+            e->get<Sprite>().frameIndex = 0;
+        } break;
+        case StructureType::TankFactory: {
+
+        } break;
+    }
+
+    return e;
+}
