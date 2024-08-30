@@ -54,6 +54,9 @@ class PlayingSystem : public System {
     void onAdded() override {
     }
 
+    void onRemoved() override {
+    }
+
     void update(const float dt) override {
         auto &inputs = Context::get().inputs;
 
@@ -73,7 +76,7 @@ class PlayingSystem : public System {
         }
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
-            Context::get().engine.changeState(Game::State::MENU);
+            Context::get().engine.changeState(Game::State::PAUSE);
         }
     }
 };

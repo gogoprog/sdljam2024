@@ -476,6 +476,14 @@ void Renderer::draw(const Vector2 &pos, const std::string &name, const bool use_
     SDL_RenderCopy(pimpl->renderer, texture.texture, &rect, &drect);
 }
 
+void Renderer::computeTextRect(SDL_Rect &rect, const Vector2 &pos, const String &text, const float scale) {
+    auto width = pimpl->getTextWidth(text, scale);
+    rect.w = width + 10;
+    rect.h = 32 * scale;
+    rect.x = pos.x - 5;
+    rect.y = pos.y - 5;
+}
+
 void Renderer::drawText(const Vector2 &pos, const std::string &text, const float scale, const bool background,
                         const bool use_camera, const float alpha) {
     auto &atlas = pimpl->atlases["Font"];
@@ -483,12 +491,8 @@ void Renderer::drawText(const Vector2 &pos, const std::string &text, const float
 
     if (background) {
 
-        auto width = pimpl->getTextWidth(text, scale);
         SDL_Rect rect;
-        rect.w = width + 10;
-        rect.h = 32 * scale;
-        rect.x = pos.x - 5;
-        rect.y = pos.y - 5;
+        computeTextRect(rect, pos, text, scale);
 
         if (use_camera) {
             rect.x -= pimpl->cameraPosition.x;

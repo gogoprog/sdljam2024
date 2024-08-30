@@ -16,10 +16,10 @@ class HudSystem : public System {
         auto &level = Context::get().level;
         auto &mouse_position = inputs.getMousePosition();
 
+            renderer.drawFilledQuad(Vector2{renderer.width - 160, 0}, Vector2{160, renderer.height}, 20, 20, 40, 1.0f, false);
         renderer.draw({renderer.width - 160, 0}, "Panel");
 
         {
-
             renderer.drawFilledQuad(Vector2{renderer.width - 140, 182}, Vector2{130, 60}, 20, 20, 20, 0.9, false);
             char buffer[64];
             sprintf(buffer, "%15d", game.stats.money);

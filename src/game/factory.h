@@ -18,4 +18,5 @@ class Factory {
     static Entity::Ptr createFlag();
     static Entity::Ptr createSelectFx();
     static Entity::Ptr createStructure(const StructureType type);
+    static Entity::Ptr createButton(const String text, std::function<void()> callback);
 };

@@ -18,6 +18,7 @@ class Game {
     enum State {
         INITIATING,
         MENU,
+        PAUSE,
         EDITOR,
         PLAYING,
         BUILDING,

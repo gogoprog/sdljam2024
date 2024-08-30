@@ -15,6 +15,7 @@
 #include "game/sprite.h"
 #include "game/turret.h"
 #include "game/vehicle.h"
+#include "game/button.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -39,6 +40,7 @@ void Game::init() {
     engine.enableSystem<SpriteRotaterSystem>();
     engine.enableSystem<SpriteRendererSystem>();
     engine.enableSystem<SelectFxSystem>();
+    engine.enableSystem<ButtonSystem>();
 
     {
         auto e = Factory::createCamera();
@@ -74,6 +76,7 @@ void Game::init() {
 
     {
         engine.setState<MenuSystem>(State::MENU);
+        engine.setState<PauseSystem, MissionSystem>(State::PAUSE);
         engine.setState<EditorSystem>(State::EDITOR);
         engine.setState<MissionSystem, PlayingSystem, HudSystem, VehicleSelectSystem, VehicleSelectedSystem>(
             State::PLAYING);

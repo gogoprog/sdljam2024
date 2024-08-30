@@ -67,19 +67,27 @@ class Renderer {
     const Atlas &getAtlas(const std::string &name);
 
     void draw(const Vector2 &pos, const Atlas &atlas, const int frameindex, const bool use_pivot = true,
-              const float scale = 1.0f, const bool use_camera = true, const int r = 255, const int g = 255, const int b = 255);
-    void draw(const Vector2 &pos, const std::string &name, const int frameindex, const bool use_pivot = true, const int r = 255, const int g = 255, const int b = 255);
+              const float scale = 1.0f, const bool use_camera = true, const int r = 255, const int g = 255,
+              const int b = 255);
+    void draw(const Vector2 &pos, const std::string &name, const int frameindex, const bool use_pivot = true,
+              const int r = 255, const int g = 255, const int b = 255);
     void draw(const Vector2 &pos, const Terrain &terrain, const int tileindex);
     void draw(const Vector2 &pos, const std::string &name, const bool use_camera = false);
+
+    void computeTextRect(SDL_Rect &rect, const Vector2 &pos, const String &text, const float scale);
 
     void drawText(const Vector2 &pos, const std::string &text, const float scale = 1.0f, const bool background = true,
                   const bool use_camera = false, const float alpha = 1.0f);
 
-    void drawCenteredText(const int y, const std::string &text, const float scale = 1.0f, const bool background = true, const float alpha = 1.0f);
+    void drawCenteredText(const int y, const std::string &text, const float scale = 1.0f, const bool background = true,
+                          const float alpha = 1.0f);
 
-    void drawFilledQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b, const float alpha = 1.0f, const bool use_camera = false);
-    void drawQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b, const bool use_camera = false);
-    void drawLine(const Vector2 &pos, const Vector2 &pos2, const int r, const int g, const int b, const bool use_camera = false);
+    void drawFilledQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b,
+                        const float alpha = 1.0f, const bool use_camera = false);
+    void drawQuad(const Vector2 &pos, const Vector2 &size, const int r, const int g, const int b,
+                  const bool use_camera = false);
+    void drawLine(const Vector2 &pos, const Vector2 &pos2, const int r, const int g, const int b,
+                  const bool use_camera = false);
 
     void setPivot(const std::string &name, const int frameindex, const Vector2 &pivot);
     int getFramesCount(const std::string &name) const;

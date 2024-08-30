@@ -24,8 +24,8 @@ class Context {
     }
 
     Vector2 getMouseWorldPosition() const {
-        auto camera_position = renderer.getCameraPosition();
-        auto mouse_position = inputs.getMousePosition();
+        auto & camera_position = renderer.getCameraPosition();
+        auto & mouse_position = inputs.getMousePosition();
 
         return mouse_position + camera_position;
     }

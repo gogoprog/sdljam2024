@@ -235,7 +235,9 @@ class Engine {
     void changeState(int state) {
         auto &stateSystems = this->stateSystems[state];
 
-        for (auto system : systems) {
+        auto copy_systems = systems;
+
+        for (auto system : copy_systems) {
             auto ti = TypeIndex(typeid(*system));
             if (!contains(stateSystems, ti) && !contains(globalSystems, ti)) {
                 disableSystem(ti);

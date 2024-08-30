@@ -12,6 +12,7 @@
 #include "turret.h"
 #include "vehicle.h"
 #include "weapon.h"
+#include "button.h"
 
 const Array<int, 8> turret_frames = {2, 3, 5, 6, 7, 8, 9, 4};
 const Array<int, 8> bullet_frames = {1, 2, 14, 26, 25, 24, 12, 0};
@@ -177,5 +178,14 @@ Entity::Ptr Factory::createStructure(const StructureType type) {
         } break;
     }
 
+    return e;
+}
+
+
+Entity::Ptr Factory::createButton(const String text, std::function<void()> callback) {
+    auto e = std::make_shared<Entity>();
+    e->add<Button>();
+    e->get<Button>().text = text;
+    e->get<Button>().onClick = callback;
     return e;
 }

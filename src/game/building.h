@@ -67,6 +67,10 @@ class BuildingSystem : public System {
 
             renderer.draw(position, str, 0, false, 220, 20, 20);
         }
+
+        if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
+            Context::get().engine.changeState(Game::State::PLAYING);
+        }
     }
 
   private:

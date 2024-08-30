@@ -25,7 +25,7 @@ void Level::reset() {
 
     buildCache();
 
-    startCoords = {{5, 5}, {tilewidth - 5, tileheight - 5}};
+    startCoords = {{6, 6}, {tilewidth - 5, tileheight - 10}};
 
     /* setLockedRoad(beginCoords); */
     /* setLockedRoad({beginCoords.x, beginCoords.y - 1}); */
