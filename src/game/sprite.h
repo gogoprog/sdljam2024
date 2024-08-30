@@ -51,7 +51,7 @@ class SpriteRendererSystem : public System {
   private:
     using Item = std::pair<Vector2, Sprite *>;
 
-    Array<Vector<Item>, 3> itemsPerLayer;
+    Array<Vector<Item>, 5> itemsPerLayer;
 };
 
 class SpriteRotaterSystem : public System {

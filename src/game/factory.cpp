@@ -78,6 +78,7 @@ SharedPtr<Entity> Factory::createVehicle() {
     e->add<Sprite>();
     e->get<Sprite>().atlasName = "Tank11";
     e->get<Sprite>().frameIndex = 0;
+    e->get<Sprite>().layer = 2;
     e->add<RotatableSprite>();
     /* e->get<RotatableSprite>().frames = std::span(tank_frames); */
     e->get<RotatableSprite>().frames = Vector<int>{tank_frames.begin(), tank_frames.end()};
@@ -103,7 +104,7 @@ SharedPtr<Entity> Factory::createSmallExplosion() {
     e->add<Sprite>();
     e->get<Sprite>().atlasName = "expSmall";
     e->get<Sprite>().frameIndex = 0;
-    e->get<Sprite>().layer = 2;
+    e->get<Sprite>().layer = 4;
     e->add<Animation>();
     e->get<Animation>().frameRate = 15;
     e->get<Animation>().autoRemove = true;
@@ -115,7 +116,7 @@ SharedPtr<Entity> Factory::createExplosion() {
     e->add<Sprite>();
     e->get<Sprite>().atlasName = "exploBig";
     e->get<Sprite>().frameIndex = 0;
-    e->get<Sprite>().layer = 2;
+    e->get<Sprite>().layer = 4;
     e->add<Animation>();
     e->get<Animation>().frameRate = 15;
     e->get<Animation>().autoRemove = true;
@@ -127,7 +128,7 @@ SharedPtr<Entity> Factory::createFlag() {
     e->add<Sprite>();
     e->get<Sprite>().atlasName = "Flag";
     e->get<Sprite>().frameIndex = 0;
-    e->get<Sprite>().layer = 2;
+    e->get<Sprite>().layer = 4;
     e->add<Animation>();
     e->get<Animation>().frameRate = 5;
     e->get<Animation>().autoRemove = false;
@@ -144,7 +145,12 @@ SharedPtr<Entity> Factory::createSelectFx() {
 
 Entity::Ptr Factory::createStructure(const StructureType type) {
     auto e = std::make_shared<Entity>();
+
+    e->add<Life>();
+    e->add<Hittable>();
+    e->get<Hittable>().radius = 56;
     e->add<Sprite>();
+    e->get<Sprite>().layer = 1;
 
     switch (type) {
         case StructureType::Turret: {
@@ -154,10 +160,16 @@ Entity::Ptr Factory::createStructure(const StructureType type) {
         case StructureType::Generator: {
             e->get<Sprite>().atlasName = "Generator";
             e->get<Sprite>().frameIndex = 0;
+            e->add<Animation>();
+            e->get<Animation>().frameRate = 15;
+            e->get<Animation>().loop = true;
         } break;
         case StructureType::TankFactory: {
             e->get<Sprite>().atlasName = "Starprt2";
             e->get<Sprite>().frameIndex = 0;
+            e->add<Animation>();
+            e->get<Animation>().frameRate = 15;
+            e->get<Animation>().loop = true;
         } break;
     }
 

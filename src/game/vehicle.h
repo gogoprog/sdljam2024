@@ -37,18 +37,21 @@ class VehicleSystem : public System {
             Entity::Ptr closest = nullptr;
             float closest_distance = std::numeric_limits<float>::max();
 
-            for (auto &other : entities) {
-                auto &other_life = other->get<Life>();
+            engine->iterate<Life>([&](Entity::Ptr &other) {
+                if (other.get() != & entity) {
+                    auto &other_life = other->get<Life>();
 
-                if (other_life.team != life.team) {
-                    auto distance = Vector2::getSquareDistance(entity.position, other->position);
+                    if (other_life.team != life.team) {
+                        auto distance = Vector2::getSquareDistance(entity.position, other->position);
 
-                    if (distance < closest_distance) {
-                        closest = other;
-                        closest_distance = distance;
+                        if (distance < closest_distance) {
+                            closest = other;
+                            closest_distance = distance;
+                        }
                     }
                 }
-            }
+                return true;
+            });
 
             if (closest != nullptr) {
                 auto delta = closest->position - entity.position;

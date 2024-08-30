@@ -23,19 +23,25 @@ class MissionSystem : public System {
             engine->addEntity(e);
         }
 
-        for (int i = 0; i < 1; ++i) {
-            auto e = Factory::createVehicle();
-            e->name = "computertank" + std::to_string(i);
+        for (int i = 0; i < 100; ++i) {
             /* auto pos = level.getTilePosition(level.startCoords[1]); */
             auto pos = Vector2{450, 450};
-            e->position.x = pos.x + rand() % 2;
-            e->position.y = pos.y + rand() % 2;
-            e->get<Life>().team = 1;
-            e->get<Sprite>().r = 250;
-            e->get<Sprite>().g = 12;
-            e->get<Sprite>().b = 12;
-            engine->addEntity(e);
-            e->add<Target>().tileCoords = level.startCoords[1];
+            pos.x = pos.x + rand() % 2000;
+            pos.y = pos.y + rand() % 2000;
+            auto p = level.getTileCoords(pos);
+
+            if (level.isFree(p)) {
+                auto e = Factory::createVehicle();
+                e->name = "computertank" + std::to_string(i);
+                e->position = pos;
+
+                e->get<Life>().team = 1;
+                e->get<Sprite>().r = 250;
+                e->get<Sprite>().g = 12;
+                e->get<Sprite>().b = 12;
+                engine->addEntity(e);
+                e->add<Target>().tileCoords = level.startCoords[1];
+            }
         }
     }
 };
