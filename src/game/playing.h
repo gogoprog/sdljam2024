@@ -12,6 +12,9 @@ class MissionSystem : public System {
 
     void onAdded() override {
         auto &level = Context::get().level;
+        auto &game = Context::get().game;
+
+        game.stats.money = 10000;
 
         for (int i = 0; i < 10; ++i) {
             auto e = Factory::createVehicle();
@@ -23,25 +26,36 @@ class MissionSystem : public System {
             engine->addEntity(e);
         }
 
-        for (int i = 0; i < 100; ++i) {
-            /* auto pos = level.getTilePosition(level.startCoords[1]); */
-            auto pos = Vector2{450, 450};
-            pos.x = pos.x + rand() % 2000;
-            pos.y = pos.y + rand() % 2000;
-            auto p = level.getTileCoords(pos);
+        if (1)
+            for (int i = 0; i < 32; ++i) {
+                auto pos = level.getTilePosition(level.startCoords[1]);
+                pos.x = pos.x - 500 - rand() % 400;
+                pos.y = pos.y + 200 + rand() % 200;
 
-            if (level.isFree(p)) {
-                auto e = Factory::createVehicle();
-                e->name = "computertank" + std::to_string(i);
-                e->position = pos;
+                pos = {600, 600};
 
-                e->get<Life>().team = 1;
-                e->get<Sprite>().r = 250;
-                e->get<Sprite>().g = 12;
-                e->get<Sprite>().b = 12;
-                engine->addEntity(e);
-                e->add<Target>().tileCoords = level.startCoords[1];
+                auto p = level.getTileCoords(pos);
+
+                if (level.isFree(p)) {
+                    auto e = Factory::createVehicle();
+                    e->name = "computertank" + std::to_string(i);
+                    e->position = pos;
+
+                    e->get<Life>().team = 1;
+                    engine->addEntity(e);
+                    /* e->add<Target>().tileCoords = level.startCoords[1]; */
+                }
             }
+
+        for (int i = 0; i < 3; ++i) {
+            auto coords = level.startCoords[1];
+            coords.x -= i * 3;
+            coords.y += 6;
+            auto pos = level.getTilePosition(coords);
+            auto e = Factory::createStructure(StructureType::TankFactory);
+            e->get<Life>().team = 1;
+            e->position = pos;
+            engine->addEntity(e);
         }
     }
 };

@@ -38,7 +38,7 @@ class VehicleSystem : public System {
             float closest_distance = std::numeric_limits<float>::max();
 
             engine->iterate<Life>([&](Entity::Ptr &other) {
-                if (other.get() != & entity) {
+                if (other.get() != &entity) {
                     auto &other_life = other->get<Life>();
 
                     if (other_life.team != life.team) {
@@ -59,6 +59,20 @@ class VehicleSystem : public System {
 
                 if (closest_distance < vehicle.fireDistance * vehicle.fireDistance) {
                     entity.get<Weapon>().mustFire = true;
+                }
+            }
+        } else {
+            if (entity.has<Target>()) {
+                auto other = entity.get<Target>().entity;
+                if (other != nullptr) {
+
+                    auto &other_life = other->get<Life>();
+                    if (other_life.team != life.team) {
+                        auto distance = Vector2::getSquareDistance(entity.position, other->position);
+                        if (distance < vehicle.fireDistance * vehicle.fireDistance) {
+                            entity.get<Weapon>().mustFire = true;
+                        }
+                    }
                 }
             }
         }

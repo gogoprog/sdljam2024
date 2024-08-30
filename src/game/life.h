@@ -17,6 +17,18 @@ class LifeSystem : public System {
         require<Life>();
     }
 
+    void onEntityAdded(Entity &entity) override {
+
+        if (entity.get<Life>().team == 1) {
+            if (entity.has<Sprite>()) {
+                auto &sprite = entity.get<Sprite>();
+                sprite.r = 255;
+                sprite.g = 150;
+                sprite.b = 100;
+            }
+        }
+    }
+
     void updateSingle(const float dt, Entity &entity) override {
         auto &life = entity.get<Life>();
 
