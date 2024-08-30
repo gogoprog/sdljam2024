@@ -24,7 +24,7 @@ void Audio::init() {
     Mix_AllocateChannels(16);
 
     for (int i = 0; i < 16; i++) {
-        Mix_Volume(i, 100);
+        Mix_Volume(i, 1);
     }
 }
 

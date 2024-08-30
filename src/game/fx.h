@@ -5,6 +5,7 @@
 struct SelectFx : public Component {
     float time{0.0f};
     float duration{1.0f};
+    Entity::Ptr target{nullptr};
 };
 
 class SelectFxSystem : public System {
@@ -30,7 +31,12 @@ class SelectFxSystem : public System {
         auto ff = std::sin((f * std::numbers::pi) / 2.0f);
         float size = a + (b - a) * ff;
 
-        renderer.drawQuad(pos - Vector2{size, size} / 2, {size, size}, 55, 200, 55, true);
+        if (fx.target != nullptr) {
+            entity.position = fx.target->position;
+            renderer.drawQuad(pos - Vector2{size, size} / 2, {size, size}, 200, 55, 55, true);
+        } else {
+            renderer.drawQuad(pos - Vector2{size, size} / 2, {size, size}, 55, 200, 55, true);
+        }
 
         if (f >= 1.0f) {
             engine->removeEntity(entity);

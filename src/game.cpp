@@ -2,6 +2,7 @@
 
 #include "context.h"
 #include "game/animation.h"
+#include "game/building.h"
 #include "game/camera.h"
 #include "game/control.h"
 #include "game/editor.h"
@@ -11,9 +12,7 @@
 #include "game/menu.h"
 #include "game/playing.h"
 #include "game/shake.h"
-#include "game/spawn.h"
 #include "game/sprite.h"
-#include "game/state.h"
 #include "game/turret.h"
 #include "game/vehicle.h"
 
@@ -76,7 +75,7 @@ void Game::init() {
         engine.setState<MenuSystem>(State::MENU);
         engine.setState<EditorSystem>(State::EDITOR);
         engine.setState<PlayingSystem, HudSystem, VehicleSelectSystem, VehicleSelectedSystem>(State::PLAYING);
-        engine.setState<PlayingSystem, HudSystem>(State::BUILDING);
+        engine.setState<PlayingSystem, HudSystem, BuildingSystem>(State::BUILDING);
     }
 
     engine.changeState(State::MENU);

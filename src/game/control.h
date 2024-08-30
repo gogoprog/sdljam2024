@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../context.h"
+#include "fx.h"
 #include "vehicle.h"
 
 struct Control : public Component {
@@ -134,29 +135,34 @@ class VehicleSelectedSystem : public System {
     void update(const float dt) override {
         auto &inputs = Context::get().inputs;
         auto &level = Context::get().level;
+        auto &renderer = Context::get().renderer;
 
         clickedEntity = nullptr;
 
-        if (inputs.isMouseJustPressed(3)) {
-            auto pos = Context::get().getMouseWorldPosition();
-            auto coords = level.getTileCoords(pos);
+        auto pos = Context::get().getMouseWorldPosition();
+        auto coords = level.getTileCoords(pos);
 
-            engine->iterate<Vehicle>([&](auto &e) {
-                auto dist = Vector2::getSquareDistance(pos, e->position);
+        engine->iterate<Vehicle>([&](auto &e) {
+            auto dist = Vector2::getSquareDistance(pos, e->position);
 
-                if (dist < 20 * 20) {
+            if (dist < 32 * 32) {
+                if (inputs.isMouseJustPressed(3)) {
                     clickedEntity = e;
-
-                    puts("tup");
                 }
-                return true;
-            });
 
+                renderer.draw(pos, "Cursor1", true);
+            }
+
+            return true;
+        });
+
+        if (inputs.isMouseJustPressed(3)) {
             if (level.isRoad(coords)) {
                 auto rpos = level.getTileCenterPosition(coords);
 
                 auto e = Factory::createSelectFx();
                 e->position = rpos;
+                e->get<SelectFx>().target = clickedEntity;
                 engine->addEntity(e);
             }
         }
@@ -200,8 +206,12 @@ class VehicleSelectedSystem : public System {
         renderer.drawQuad(pos - Vector2{size, size} / 2, {size, size}, 255, 255, 255, true);
 
         if (entity.has<Target>()) {
-            auto rtarget = level.getTileCenterPosition(entity.get<Target>().tileCoords);
-            renderer.draw(rtarget, "Cursor1", true);
+            auto &target = entity.get<Target>();
+            auto pos = level.getTileCenterPosition(target.tileCoords);
+            if (target.entity != nullptr) {
+                pos = target.entity->position;
+            }
+            renderer.draw(pos, "Cursor1", true);
         }
     }
 };

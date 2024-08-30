@@ -351,16 +351,16 @@ bool Level::isFree(const Vector2 &coords) {
 
 bool Level::canBuildAt(const Vector2 &coords) {
 
-    if (!isFree(coords)) {
+    if (isFree(coords)) {
         return false;
     }
-    if (!isFree({coords.x, coords.y - 1})) {
+    if (isFree({coords.x, coords.y - 1})) {
         return false;
     }
-    if (!isFree({coords.x - 1, coords.y - 1})) {
+    if (isFree({coords.x - 1, coords.y - 1})) {
         return false;
     }
-    if (!isFree({coords.x - 1, coords.y})) {
+    if (isFree({coords.x - 1, coords.y})) {
         return false;
     }
 
