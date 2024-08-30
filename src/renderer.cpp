@@ -413,10 +413,12 @@ const Atlas &Renderer::getAtlas(const std::string &name) {
 }
 
 void Renderer::draw(const Vector2 &pos, const Atlas &atlas, const int frameindex, const bool use_pivot,
-                    const float scale, const bool use_camera) {
+                    const float scale, const bool use_camera, const int r, const int g, const int b) {
     auto &frame = atlas.frames[frameindex];
     auto rect = frame.rect;
     auto drect = rect;
+
+    SDL_SetTextureColorMod(atlas.texture, r, g, b);
 
     drect.x = pos.x;
     drect.y = pos.y;
@@ -440,8 +442,7 @@ void Renderer::draw(const Vector2 &pos, const Atlas &atlas, const int frameindex
 void Renderer::draw(const Vector2 &pos, const std::string &name, const int frameindex, const bool use_pivot,
                     const int r, const int g, const int b) {
     auto &atlas = pimpl->atlases[name];
-    SDL_SetTextureColorMod(atlas.texture, r, g, b);
-    draw(pos, atlas, frameindex, use_pivot);
+    draw(pos, atlas, frameindex, use_pivot, 1.0f, true, r, g, b);
 }
 
 void Renderer::draw(const Vector2 &pos, const Terrain &terrain, const int tileindex) {

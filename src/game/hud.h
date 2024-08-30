@@ -19,16 +19,19 @@ class HudSystem : public System {
         renderer.draw({renderer.width - 160, 0}, "Panel");
 
         {
+
+            renderer.drawFilledQuad(Vector2{renderer.width - 140, 182}, Vector2{130, 60}, 20, 20, 20, 0.9, false);
             char buffer[64];
             sprintf(buffer, "%15d", game.stats.money);
-            renderer.drawText({renderer.width - 130, 191}, "money", 1, false);
+            renderer.drawText({renderer.width - 130, 191}, "energy", 1, false);
             renderer.drawText({renderer.width - 130, 218}, buffer, 1, false);
         }
         {
-            char buffer[64];
-            sprintf(buffer, "%15d", game.stats.lifes);
-            renderer.drawText({renderer.width - 130, 188 + 150}, "lifes", 1, false);
-            renderer.drawText({renderer.width - 130, 215 + 150}, buffer, 1, false);
+            renderer.drawFilledQuad(Vector2{renderer.width - 140, 320}, Vector2{130, 250}, 20, 20, 20, 0.9, false);
+            renderer.drawText({renderer.width - 130, 188 + 150}, "build", 1, false);
+            renderer.drawText({renderer.width - 130, 188 + 200}, "1. turret", 1, false);
+            renderer.drawText({renderer.width - 130, 188 + 250}, "2. generator", 1, false);
+            renderer.drawText({renderer.width - 130, 188 + 300}, "3. factory", 1, false);
         }
         {
             auto minimapSize = 120;
@@ -76,7 +79,7 @@ class HudSystem : public System {
                     auto dx = (mouse_position.x - origin.x) / minimapSize;
                     auto dy = (mouse_position.y - origin.y) / minimapSize;
 
-                    auto & campos = Context::get().cameraEntity->position;
+                    auto &campos = Context::get().cameraEntity->position;
 
                     campos.x = level.width * dx - renderer.width * 0.5;
                     campos.y = level.height * dy - renderer.height * 0.5;

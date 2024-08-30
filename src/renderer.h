@@ -67,7 +67,7 @@ class Renderer {
     const Atlas &getAtlas(const std::string &name);
 
     void draw(const Vector2 &pos, const Atlas &atlas, const int frameindex, const bool use_pivot = true,
-              const float scale = 1.0f, const bool use_camera = true);
+              const float scale = 1.0f, const bool use_camera = true, const int r = 255, const int g = 255, const int b = 255);
     void draw(const Vector2 &pos, const std::string &name, const int frameindex, const bool use_pivot = true, const int r = 255, const int g = 255, const int b = 255);
     void draw(const Vector2 &pos, const Terrain &terrain, const int tileindex);
     void draw(const Vector2 &pos, const std::string &name, const bool use_camera = false);

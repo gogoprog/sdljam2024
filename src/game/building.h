@@ -63,6 +63,9 @@ class BuildingSystem : public System {
             auto pos = inputs.getMousePosition();
             pos.y += 32;
             renderer.drawText(pos, "build (" + std::to_string(game.turretCost) + ")");
+        } else {
+
+            renderer.draw(position, str, 0, false, 220, 20, 20);
         }
     }
 
