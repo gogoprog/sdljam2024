@@ -69,7 +69,7 @@ void Game::init() {
         }
 
     stats.lifes = 25;
-    stats.money = 1000;
+    stats.money = 10000;
 
     {
         engine.setState<MenuSystem>(State::MENU);

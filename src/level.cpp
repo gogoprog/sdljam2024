@@ -268,10 +268,9 @@ void Level::render(uint32_t ticks, Renderer &renderer) {
             for (int x = 0; x < tilewidth; ++x) {
                 Vector2 pos = {x * tileSpacing, y * tileSpacing};
 
-                if (isFree({x, y})) {
+                if (!isFree({x, y})) {
                     renderer.drawFilledQuad(pos, {tileSpacing, tileSpacing}, 255, 0, 0, 0.5f, true);
                 } else {
-
                     renderer.drawFilledQuad(pos, {tileSpacing, tileSpacing}, 255, 255, 255, 0.5f, true);
                 }
             }
@@ -346,21 +345,21 @@ bool Level::findPath(Path &path, const Vector2 &start, const Vector2 &end) {
 }
 
 bool Level::isFree(const Vector2 &coords) {
-    return (!roadmap[coords] && !locks[coords]);
+    return roadmap[coords] && !locks[coords];
 }
 
 bool Level::canBuildAt(const Vector2 &coords) {
 
-    if (isFree(coords)) {
+    if (!isFree(coords)) {
         return false;
     }
-    if (isFree({coords.x, coords.y - 1})) {
+    if (!isFree({coords.x, coords.y - 1})) {
         return false;
     }
-    if (isFree({coords.x - 1, coords.y - 1})) {
+    if (!isFree({coords.x - 1, coords.y - 1})) {
         return false;
     }
-    if (isFree({coords.x - 1, coords.y})) {
+    if (!isFree({coords.x - 1, coords.y})) {
         return false;
     }
 

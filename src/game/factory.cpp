@@ -156,7 +156,8 @@ Entity::Ptr Factory::createStructure(const StructureType type) {
             e->get<Sprite>().frameIndex = 0;
         } break;
         case StructureType::TankFactory: {
-
+            e->get<Sprite>().atlasName = "Starprt2";
+            e->get<Sprite>().frameIndex = 0;
         } break;
     }
 

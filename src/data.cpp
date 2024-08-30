@@ -35,6 +35,7 @@ void loadData(Renderer &renderer, Audio &audio) {
     renderer.loadAtlas("Flag", 20, 20, 5);
 
     renderer.loadAtlas("Generator", 40, 60, 15, true);
+    renderer.loadAtlas("Starprt2", 40, 60, 5, true);
 
     renderer.loadTerrain("Snd2Watr");
 

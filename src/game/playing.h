@@ -61,6 +61,11 @@ class PlayingSystem : public System {
             engine->getSystem<BuildingSystem>().typeToBuild = StructureType::Generator;
         }
 
+        if (inputs.isKeyJustPressed(SDL_SCANCODE_3)) {
+            engine->changeState(Game::State::BUILDING);
+            engine->getSystem<BuildingSystem>().typeToBuild = StructureType::TankFactory;
+        }
+
         if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
             Context::get().engine.changeState(Game::State::MENU);
         }

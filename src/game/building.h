@@ -31,7 +31,7 @@ class BuildingSystem : public System {
                 str = "Generator";
             } break;
             case StructureType::TankFactory: {
-
+                str = "Starprt2";
             } break;
         }
 
