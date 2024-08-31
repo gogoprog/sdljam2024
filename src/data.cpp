@@ -48,6 +48,9 @@ void loadData(Renderer &renderer, Audio &audio) {
     audio.loadSound("error");
     audio.loadSound("step");
     audio.loadSound("click");
+    audio.loadSound("move");
+    audio.loadSound("select");
+    audio.loadSound("building");
     audio.loadMusic("music");
 
     turretStats[0].range = 300;

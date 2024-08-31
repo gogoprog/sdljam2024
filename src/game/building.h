@@ -68,6 +68,8 @@ class BuildingSystem : public System {
                 level.lock2x2(tile_coords);
                 game.stats.money -= price;
 
+                Context::get().audio.playSound("building");
+
                 engine->changeState(Game::State::PLAYING);
             }
 

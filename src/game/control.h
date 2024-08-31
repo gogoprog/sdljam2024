@@ -117,6 +117,8 @@ class VehicleSelectSystem : public System {
 
                 if (!entity.has<Selected>()) {
                     entity.add<Selected>();
+
+                    Context::get().audio.playSound("select");
                 }
             }
         }
@@ -207,6 +209,8 @@ class VehicleSelectedSystem : public System {
                 } else {
                     entity.get<Target>().entity = clickedEntity;
                 }
+
+                Context::get().audio.playSound("move");
             }
         }
 

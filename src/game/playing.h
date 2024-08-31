@@ -14,7 +14,7 @@ class MissionSystem : public System {
         auto &level = Context::get().level;
         auto &game = Context::get().game;
 
-        game.stats.money = 1000;
+        game.stats.money = 2000;
 
         for (int i = 0; i < 10; ++i) {
             auto e = Factory::createVehicle(0);

@@ -11,6 +11,8 @@ class MenuSystem : public System {
   public:
     MenuSystem() {
         require<Control>();
+
+        priority = 1000;
     }
 
     void onAdded() override {
@@ -99,6 +101,7 @@ class MenuSystem : public System {
 class PauseSystem : public System {
   public:
     PauseSystem() {
+        priority = 1000;
     }
 
     void onAdded() override {

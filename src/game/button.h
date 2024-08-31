@@ -17,7 +17,7 @@ class ButtonSystem : public System {
   public:
     ButtonSystem() {
         require<Button>();
-        priority = 999;
+        priority = 1001;
     }
 
     void updateSingle(const float dt, Entity &entity) override {

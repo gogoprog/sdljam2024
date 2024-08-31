@@ -9,7 +9,7 @@
 class HudSystem : public System {
   public:
     HudSystem() {
-        priority = 10;
+        priority = 1000;
     }
 
     void onAdded() override {
