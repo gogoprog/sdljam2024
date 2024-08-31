@@ -69,22 +69,26 @@ class VehicleSelectSystem : public System {
     void update(const float dt) override {
         auto &inputs = Context::get().inputs;
         auto &renderer = Context::get().renderer;
+        auto &mouse_pos = inputs.getMousePosition();
+
+        if (mouse_pos.x > renderer.width - 150)
+            return;
 
         applySelection = false;
 
         if (!selecting && inputs.isMouseJustPressed(1)) {
-            startMousePosition = inputs.getMousePosition();
-            endMousePosition = inputs.getMousePosition();
+            startMousePosition = mouse_pos;
+            endMousePosition = mouse_pos;
             selecting = true;
         }
 
         if (selecting) {
 
             renderer.drawQuad(startMousePosition, endMousePosition - startMousePosition, 255, 255, 255);
-            endMousePosition = inputs.getMousePosition();
+            endMousePosition = mouse_pos;
 
             if (inputs.isMouseJustReleased(1)) {
-                endMousePosition = inputs.getMousePosition();
+                endMousePosition = mouse_pos;
                 selecting = false;
                 applySelection = true;
             }
@@ -136,6 +140,10 @@ class VehicleSelectedSystem : public System {
         auto &inputs = Context::get().inputs;
         auto &level = Context::get().level;
         auto &renderer = Context::get().renderer;
+        auto &mouse_pos = inputs.getMousePosition();
+
+        if (mouse_pos.x > renderer.width - 150)
+            return;
 
         clickedEntity = nullptr;
 
@@ -215,5 +223,3 @@ class VehicleSelectedSystem : public System {
         }
     }
 };
-
-

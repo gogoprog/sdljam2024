@@ -8,6 +8,9 @@ struct Button : public Component {
     String text = "unnamed";
     std::function<void()> onClick;
     float scale = 1.0f;
+    bool alignCenter = false;
+    bool alignRight = false;
+    float right = 0.0f;
 };
 
 class ButtonSystem : public System {
@@ -22,12 +25,18 @@ class ButtonSystem : public System {
         auto &renderer = Context::get().renderer;
         auto &inputs = Context::get().inputs;
         auto &button = entity.get<Button>();
-
         auto &mpos = inputs.getMousePosition();
-
         SDL_Rect rect;
 
         renderer.computeTextRect(rect, pos, button.text, button.scale);
+
+        if (button.alignRight) {
+            pos.x = renderer.width - button.right;
+        }
+
+        if (button.alignCenter) {
+            pos.x = renderer.width / 2.0f - rect.w / 2.0f;
+        }
 
         renderer.drawText(pos, button.text, button.scale);
 

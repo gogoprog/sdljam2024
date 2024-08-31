@@ -74,20 +74,6 @@ class PlayingSystem : public System {
     void update(const float dt) override {
         auto &inputs = Context::get().inputs;
 
-        if (inputs.isKeyJustPressed(SDL_SCANCODE_1)) {
-            engine->changeState(Game::State::BUILDING);
-            engine->getSystem<BuildingSystem>().typeToBuild = StructureType::Turret;
-        }
-
-        if (inputs.isKeyJustPressed(SDL_SCANCODE_2)) {
-            engine->changeState(Game::State::BUILDING);
-            engine->getSystem<BuildingSystem>().typeToBuild = StructureType::Generator;
-        }
-
-        if (inputs.isKeyJustPressed(SDL_SCANCODE_3)) {
-            engine->changeState(Game::State::BUILDING);
-            engine->getSystem<BuildingSystem>().typeToBuild = StructureType::TankFactory;
-        }
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
             Context::get().engine.changeState(Game::State::PAUSE);

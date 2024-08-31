@@ -16,6 +16,7 @@ class MenuSystem : public System {
         {
             auto e = Factory::createButton("play", []() { Context::get().engine.changeState(Game::State::PLAYING); });
             e->get<Button>().scale = 2.0f;
+            e->get<Button>().alignCenter = true;
             e->position = {renderer.width / 2, 350};
             buttons.push_back(e);
             engine->addEntity(e);
@@ -23,6 +24,7 @@ class MenuSystem : public System {
         {
             auto e = Factory::createButton("editor", []() { Context::get().engine.changeState(Game::State::EDITOR); });
             e->get<Button>().scale = 1.0f;
+            e->get<Button>().alignCenter = true;
             e->position = {renderer.width / 2, 450};
             buttons.push_back(e);
             engine->addEntity(e);
@@ -86,6 +88,7 @@ class PauseSystem : public System {
         {
             auto e = Factory::createButton("resume", []() { Context::get().engine.changeState(Game::State::PLAYING); });
             e->get<Button>().scale = 2.0f;
+            e->get<Button>().alignCenter = true;
             e->position = {renderer.width / 2, 350};
             buttons.push_back(e);
             engine->addEntity(e);
