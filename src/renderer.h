@@ -89,6 +89,8 @@ class Renderer {
     void drawLine(const Vector2 &pos, const Vector2 &pos2, const int r, const int g, const int b,
                   const bool use_camera = false);
 
+    void drawProgressBar(const Vector2 &pos, const float width, const float value, const bool gradient = false);
+
     void setPivot(const std::string &name, const int frameindex, const Vector2 &pivot);
     int getFramesCount(const std::string &name) const;
     void exportAtlas(const std::string &name);

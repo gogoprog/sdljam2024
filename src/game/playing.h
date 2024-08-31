@@ -14,7 +14,7 @@ class MissionSystem : public System {
         auto &level = Context::get().level;
         auto &game = Context::get().game;
 
-        game.stats.money = 10000;
+        game.stats.money = 1000;
 
         for (int i = 0; i < 10; ++i) {
             auto e = Factory::createVehicle(0);
@@ -29,9 +29,6 @@ class MissionSystem : public System {
                 auto pos = level.getTilePosition(level.startCoords[1]);
                 pos.x = pos.x - 500 - rand() % 400;
                 pos.y = pos.y + 200 + rand() % 200;
-
-                pos = {600, 600};
-
                 auto p = level.getTileCoords(pos);
 
                 if (level.isFree(p)) {
@@ -50,6 +47,17 @@ class MissionSystem : public System {
             coords.y += 6;
             auto pos = level.getTilePosition(coords);
             auto e = Factory::createStructure(StructureType::TankFactory);
+            e->get<Life>().team = 1;
+            e->position = pos;
+            engine->addEntity(e);
+        }
+
+        {
+            auto coords = level.startCoords[1];
+            coords.x -= 20;
+            coords.y += 6;
+            auto pos = level.getTilePosition(coords);
+            auto e = Factory::createStructure(StructureType::Turret);
             e->get<Life>().team = 1;
             e->position = pos;
             engine->addEntity(e);

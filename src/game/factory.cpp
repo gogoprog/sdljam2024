@@ -155,6 +155,7 @@ Entity::Ptr Factory::createStructure(const StructureType type) {
 
     e->add<Structure>();
     e->add<Life>();
+    e->get<Life>().hp = 1000;
     e->add<Hittable>();
     e->get<Hittable>().radius = 56;
     e->add<Sprite>();
@@ -172,6 +173,7 @@ Entity::Ptr Factory::createStructure(const StructureType type) {
             e->add<Animation>();
             e->get<Animation>().frameRate = 15;
             e->get<Animation>().loop = true;
+            e->add<Generator>();
         } break;
         case StructureType::TankFactory: {
             e->get<Sprite>().atlasName = "Starprt2";

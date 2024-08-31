@@ -571,6 +571,19 @@ void Renderer::drawLine(const Vector2 &pos, const Vector2 &pos2, const int r, co
     SDL_RenderDrawLine(pimpl->renderer, from.x, from.y, to.x, to.y);
 }
 
+void Renderer::drawProgressBar(const Vector2 &pos, const float width, const float value, const bool gradient) {
+    drawFilledQuad(pos - Vector2{width / 2, 1.0f}, Vector2{width, 4.0f}, 255, 255, 255, 0.5f, true);
+
+    auto size = value * (width - 2);
+
+    if (gradient) {
+        drawFilledQuad(pos - Vector2{width / 2 + 1, 0.0f}, Vector2{size, 2.0f}, 255 * value, 255 * (1 - value), 0, 0.5f,
+                       true);
+    } else {
+        drawFilledQuad(pos - Vector2{width / 2 + 1, 0.0f}, Vector2{size, 2.0f}, 0, 0, 255, 0.5f, true);
+    }
+}
+
 void Renderer::setPivot(const std::string &name, const int frameindex, const Vector2 &pivot) {
     auto &atlas = pimpl->atlases[name];
     auto &frame = atlas.frames[frameindex];

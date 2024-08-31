@@ -31,6 +31,7 @@ void Game::init() {
     engine.enableSystem<WeaponSystem>();
     engine.enableSystem<StructureSystem>();
     engine.enableSystem<TankFactorySystem>();
+    engine.enableSystem<GeneratorSystem>();
     engine.enableSystem<BulletSystem>();
     engine.enableSystem<LifeSystem>();
     engine.enableSystem<MoveSystem>();
@@ -44,43 +45,16 @@ void Game::init() {
     engine.enableSystem<SelectFxSystem>();
     engine.enableSystem<ButtonSystem>();
 
-    {
-        auto e = Factory::createCamera();
-        engine.addEntity(e);
-        Context::get().cameraEntity = e;
-    }
+    auto e = Factory::createCamera();
+    engine.addEntity(e);
+    Context::get().cameraEntity = e;
 
-    for (auto &coord : level.startCoords) {
-        auto e = Factory::createFlag();
-        e->position = level.getTileCenterPosition(coord);
-        engine.addEntity(e);
-    }
-
-    if (0)
-        for (int i = 0; i < 10; ++i) {
-            Vector2 pos = {rand() % 2048, rand() % 2048};
-
-            {
-                auto e = Factory::createBase();
-                e->position = pos;
-                engine.addEntity(e);
-            }
-
-            {
-                auto e = Factory::createTurret();
-                e->position = pos;
-                engine.addEntity(e);
-            }
-        }
-
-    {
-        engine.setState<MenuSystem>(State::MENU);
-        engine.setState<PauseSystem, MissionSystem>(State::PAUSE);
-        engine.setState<EditorSystem>(State::EDITOR);
-        engine.setState<MissionSystem, PlayingSystem, HudSystem, VehicleSelectSystem, VehicleSelectedSystem>(
-            State::PLAYING);
-        engine.setState<MissionSystem, HudSystem, BuildingSystem>(State::BUILDING);
-    }
+    engine.setState<MenuSystem>(State::MENU);
+    engine.setState<PauseSystem, MissionSystem>(State::PAUSE);
+    engine.setState<EditorSystem>(State::EDITOR);
+    engine.setState<MissionSystem, PlayingSystem, HudSystem, VehicleSelectSystem, VehicleSelectedSystem>(
+        State::PLAYING);
+    engine.setState<MissionSystem, HudSystem, BuildingSystem>(State::BUILDING);
 
     engine.changeState(State::MENU);
 }

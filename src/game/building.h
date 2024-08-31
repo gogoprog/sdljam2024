@@ -13,6 +13,10 @@ struct TankFactory : public Component {
     float timeLeft{0.0f};
 };
 
+struct Generator : public Component {
+    float timeLeft{0.0f};
+};
+
 class BuildingSystem : public System {
   public:
     StructureType typeToBuild;
@@ -28,16 +32,20 @@ class BuildingSystem : public System {
         auto &renderer = Context::get().renderer;
         auto &game = Context::get().game;
         String str;
+        int price;
         switch (typeToBuild) {
 
             case StructureType::Turret: {
                 str = "Turret";
+                price = 500;
             } break;
             case StructureType::Generator: {
                 str = "Generator";
+                price = 300;
             } break;
             case StructureType::TankFactory: {
                 str = "Starprt2";
+                price = 2000;
             } break;
         }
 
@@ -52,7 +60,7 @@ class BuildingSystem : public System {
             renderer.draw(position, atlas, 0);
 
             if (inputs.isMouseJustPressed(1)) {
-                if (game.stats.money >= game.turretCost) {
+                if (game.stats.money >= price) {
                     {
                         auto e = Factory::createStructure(typeToBuild);
                         e->position = position;
@@ -60,7 +68,7 @@ class BuildingSystem : public System {
                     }
 
                     level.lock2x2(tile_coords);
-                    game.stats.money -= game.turretCost;
+                    game.stats.money -= price;
 
                     engine->changeState(Game::State::PLAYING);
                 }
@@ -68,13 +76,13 @@ class BuildingSystem : public System {
 
             auto pos = inputs.getMousePosition();
             pos.y += 32;
-            renderer.drawText(pos, "build (" + std::to_string(game.turretCost) + ")");
+            renderer.drawText(pos, "build (" + std::to_string(price) + ")");
         } else {
 
             renderer.draw(position, str, 0, false, 220, 20, 20);
         }
 
-        if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
+        if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE) || inputs.isMouseJustPressed(3)) {
             Context::get().engine.changeState(Game::State::PLAYING);
         }
     }
@@ -118,10 +126,13 @@ class StructureSystem : public System {
 };
 
 class TankFactorySystem : public System {
+    static inline float duration = 10.0f;
+
   public:
     TankFactorySystem() {
         require<Structure>();
         require<TankFactory>();
+        priority = 100;
     }
 
     void onEntityAdded(Entity &entity) override {
@@ -144,7 +155,45 @@ class TankFactorySystem : public System {
             e->position.y += 64;
             engine->addEntity(e);
 
-            tf.timeLeft += 10.0f;
+            tf.timeLeft += duration;
         }
+
+        auto &renderer = Context::get().renderer;
+        renderer.drawProgressBar(entity.position - Vector2{0, 60}, 80, 1.0f - tf.timeLeft / duration);
+    }
+};
+
+class GeneratorSystem : public System {
+    static inline float duration = 5.0f;
+
+  public:
+    GeneratorSystem() {
+        require<Structure>();
+        require<Generator>();
+        priority = 100;
+    }
+
+    void onEntityAdded(Entity &entity) override {
+        auto &tf = entity.get<Generator>();
+        tf.timeLeft = 5.0f;
+    }
+
+    void onEntityRemoved(Entity &entity) override {
+    }
+
+    void updateSingle(const float dt, Entity &entity) override {
+        auto &tf = entity.get<Generator>();
+        auto &life = entity.get<Life>();
+
+        tf.timeLeft -= dt;
+
+        if (tf.timeLeft <= 0.0f) {
+            Context::get().game.stats.money += 10;
+
+            tf.timeLeft += duration;
+        }
+
+        auto &renderer = Context::get().renderer;
+        renderer.drawProgressBar(entity.position - Vector2{0, 40}, 80, 1.0f - tf.timeLeft / duration);
     }
 };

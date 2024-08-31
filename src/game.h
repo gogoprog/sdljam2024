@@ -33,6 +33,4 @@ class Game {
     void reset();
 
     Stats stats;
-
-    int turretCost{250};
 };
