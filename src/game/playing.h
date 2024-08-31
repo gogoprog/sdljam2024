@@ -25,7 +25,7 @@ class MissionSystem : public System {
         }
 
         if (1)
-            for (int i = 0; i < 32; ++i) {
+            for (int i = 0; i < 16; ++i) {
                 auto pos = level.getTilePosition(level.startCoords[1]);
                 pos.x = pos.x - 500 - rand() % 400;
                 pos.y = pos.y + 200 + rand() % 200;
@@ -62,7 +62,23 @@ class MissionSystem : public System {
             e->position = pos;
             engine->addEntity(e);
         }
+
+        Context::get().cameraEntity->position = {0, 0};
     }
+
+    void update(const float dt) override {
+
+        time -= dt;
+
+        if (time > 0) {
+            auto &renderer = Context::get().renderer;
+            auto alpha = time / 3;
+            renderer.drawCenteredText(renderer.height / 2, "destroy the enemy", 3.0f, false, alpha);
+        }
+    }
+
+  private:
+    float time{3};
 };
 
 class PlayingSystem : public System {

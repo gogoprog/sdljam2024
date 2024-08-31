@@ -100,6 +100,8 @@ class Renderer {
 
     void onWindowEvent(const SDL_WindowEvent &wevent);
 
+    void toggleFullscreen();
+
     int width;
     int height;
 

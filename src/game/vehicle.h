@@ -33,6 +33,7 @@ class VehicleSystem : public System {
         auto &game = Context::get().game;
         auto &vehicle = entity.get<Vehicle>();
         auto &life = entity.get<Life>();
+        auto &renderer = Context::get().renderer;
 
         if (!entity.has<Target>() && !entity.has<Move>()) {
             Entity::Ptr closest = nullptr;
@@ -62,6 +63,17 @@ class VehicleSystem : public System {
                     entity.get<Weapon>().mustFire = true;
                 }
             }
+
+            // BotSystem
+
+            if (life.team == 1) {
+                auto x = rand() % level.tilewidth;
+                auto y = rand() % level.tileheight;
+
+                if (level.isFree({x, y})) {
+                    entity.add<Target>().tileCoords = {x, y};
+                }
+            }
         } else {
             if (entity.has<Target>()) {
                 auto other = entity.get<Target>().entity;
@@ -76,6 +88,13 @@ class VehicleSystem : public System {
                     }
                 }
             }
+        }
+
+        auto mwp = Context::get().getMouseWorldPosition();
+        auto distance = Vector2::getSquareDistance(entity.position, mwp);
+
+        if (distance < 32 * 32) {
+            renderer.drawProgressBar(entity.position - Vector2{0, 20}, 40, life.hp / (float)life.maxHp, true);
         }
     }
 };

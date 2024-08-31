@@ -572,15 +572,15 @@ void Renderer::drawLine(const Vector2 &pos, const Vector2 &pos2, const int r, co
 }
 
 void Renderer::drawProgressBar(const Vector2 &pos, const float width, const float value, const bool gradient) {
-    drawFilledQuad(pos - Vector2{width / 2, 1.0f}, Vector2{width, 4.0f}, 255, 255, 255, 0.5f, true);
+    drawFilledQuad(pos - Vector2{width / 2, 1.0f}, Vector2{width, 4.0f}, 255, 255, 255, 0.9f, true);
 
     auto size = value * (width - 2);
+    auto w2 = width - 2;
 
     if (gradient) {
-        drawFilledQuad(pos - Vector2{width / 2 + 1, 0.0f}, Vector2{size, 2.0f}, 255 * value, 255 * (1 - value), 0, 0.5f,
-                       true);
+        drawFilledQuad(pos - Vector2{w2 / 2, 0.0f}, Vector2{size, 2.0f}, 255 * (1 - value), 255 * value, 0, 0.9f, true);
     } else {
-        drawFilledQuad(pos - Vector2{width / 2 + 1, 0.0f}, Vector2{size, 2.0f}, 0, 0, 255, 0.5f, true);
+        drawFilledQuad(pos - Vector2{w2 / 2, 0.0f}, Vector2{size, 2.0f}, 0, 0, 255, 0.9f, true);
     }
 }
 
@@ -618,5 +618,17 @@ void Renderer::onWindowEvent(const SDL_WindowEvent &wevent) {
             width = wevent.data1;
             height = wevent.data2;
             break;
+    }
+}
+
+void Renderer::toggleFullscreen() {
+    static bool fullscreen = false;
+
+    fullscreen = !fullscreen;
+
+    if (fullscreen) {
+        SDL_SetWindowFullscreen(pimpl->window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    } else {
+        SDL_SetWindowFullscreen(pimpl->window, 0);
     }
 }

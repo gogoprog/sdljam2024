@@ -3,6 +3,7 @@
 #include "../context.h"
 #include "factory.h"
 #include "life.h"
+#include "vehicle.h"
 
 struct Structure : public Component {
     bool needCanon = false;
@@ -55,30 +56,25 @@ class BuildingSystem : public System {
         auto tile_coords = level.getTileCoords(world_position);
         auto position = level.getTilePosition(tile_coords);
 
-        if (level.canBuildAt(tile_coords)) {
+        if (level.canBuildAt(tile_coords) && game.stats.money >= price) {
 
             renderer.draw(position, atlas, 0);
 
             if (inputs.isMouseJustPressed(1)) {
-                if (game.stats.money >= price) {
-                    {
-                        auto e = Factory::createStructure(typeToBuild);
-                        e->position = position;
-                        engine->addEntity(e);
-                    }
+                auto e = Factory::createStructure(typeToBuild);
+                e->position = position;
+                engine->addEntity(e);
 
-                    level.lock2x2(tile_coords);
-                    game.stats.money -= price;
+                level.lock2x2(tile_coords);
+                game.stats.money -= price;
 
-                    engine->changeState(Game::State::PLAYING);
-                }
+                engine->changeState(Game::State::PLAYING);
             }
 
             auto pos = inputs.getMousePosition();
             pos.y += 32;
             renderer.drawText(pos, "build (" + std::to_string(price) + ")");
         } else {
-
             renderer.draw(position, str, 0, false, 220, 20, 20);
         }
 
@@ -95,6 +91,7 @@ class StructureSystem : public System {
   public:
     StructureSystem() {
         require<Structure>();
+        priority = 100;
     }
 
     void onEntityAdded(Entity &entity) override {
@@ -122,6 +119,14 @@ class StructureSystem : public System {
     }
 
     void updateSingle(const float dt, Entity &entity) override {
+        auto &renderer = Context::get().renderer;
+        auto &life = entity.get<Life>();
+        auto mwp = Context::get().getMouseWorldPosition();
+        auto distance = Vector2::getSquareDistance(entity.position, mwp);
+
+        if (distance < 32 * 32) {
+            renderer.drawProgressBar(entity.position - Vector2{0, 45}, 80, life.hp / (float)life.maxHp, true);
+        }
     }
 };
 
@@ -146,20 +151,34 @@ class TankFactorySystem : public System {
     void updateSingle(const float dt, Entity &entity) override {
         auto &tf = entity.get<TankFactory>();
         auto &life = entity.get<Life>();
+        auto &level = Context::get().level;
 
-        tf.timeLeft -= dt;
+        auto &game = Context::get().game;
 
-        if (tf.timeLeft <= 0.0f) {
-            auto e = Factory::createVehicle(life.team);
-            e->position = entity.position;
-            e->position.y += 64;
-            engine->addEntity(e);
+        if (game.stats.money > 500 || life.team == 1) {
 
-            tf.timeLeft += duration;
+            tf.timeLeft -= dt;
+
+            if (tf.timeLeft <= 0.0f) {
+                auto e = Factory::createVehicle(life.team);
+                e->position = entity.position;
+                e->position.y += 64;
+                engine->addEntity(e);
+
+                e->add<Target>().tileCoords = level.getTileCoords(entity.position) + Vector2{0, 1};
+
+                tf.timeLeft += duration;
+
+                if (life.team == 0) {
+                    game.stats.money -= 500;
+                }
+            }
         }
 
-        auto &renderer = Context::get().renderer;
-        renderer.drawProgressBar(entity.position - Vector2{0, 60}, 80, 1.0f - tf.timeLeft / duration);
+        if (life.team == 0) {
+            auto &renderer = Context::get().renderer;
+            renderer.drawProgressBar(entity.position - Vector2{0, 60}, 80, 1.0f - tf.timeLeft / duration);
+        }
     }
 };
 
@@ -188,12 +207,17 @@ class GeneratorSystem : public System {
         tf.timeLeft -= dt;
 
         if (tf.timeLeft <= 0.0f) {
-            Context::get().game.stats.money += 10;
+
+            if (life.team == 0) {
+                Context::get().game.stats.money += 100;
+            }
 
             tf.timeLeft += duration;
         }
 
-        auto &renderer = Context::get().renderer;
-        renderer.drawProgressBar(entity.position - Vector2{0, 40}, 80, 1.0f - tf.timeLeft / duration);
+        if (life.team == 0) {
+            auto &renderer = Context::get().renderer;
+            renderer.drawProgressBar(entity.position - Vector2{0, 40}, 80, 1.0f - tf.timeLeft / duration);
+        }
     }
 };

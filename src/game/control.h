@@ -40,10 +40,6 @@ class ControlSystem : public System {
             entity.position.y += dt * speed;
         }
 
-        if (inputs.isKeyPressed(SDL_SCANCODE_F)) {
-            Context::get().audio.playSound("firing", Context::get().getMouseWorldPosition());
-        }
-
         if (inputs.isMouseJustPressed(3)) {
             control.startMousePosition = inputs.getMousePosition();
             control.startPosition = entity.position;
@@ -189,6 +185,7 @@ class VehicleSelectedSystem : public System {
         auto &inputs = Context::get().inputs;
         auto &renderer = Context::get().renderer;
         auto &pos = entity.position;
+        auto &life = entity.get<Life>();
 
         if (inputs.isMouseJustPressed(1)) {
             entity.remove<Selected>();
@@ -225,5 +222,7 @@ class VehicleSelectedSystem : public System {
             }
             renderer.draw(pos, "Cursor1", true);
         }
+
+        renderer.drawProgressBar(entity.position - Vector2{0, 20}, 40, life.hp / (float)life.maxHp, true);
     }
 };

@@ -9,6 +9,7 @@
 struct Life : public Component {
     int team{0};
     int hp{100};
+    int maxHp;
 };
 
 class LifeSystem : public System {
@@ -18,7 +19,10 @@ class LifeSystem : public System {
     }
 
     void onEntityAdded(Entity &entity) override {
-        if (entity.get<Life>().team == 1) {
+        auto &life = entity.get<Life>();
+        life.maxHp = life.hp;
+
+        if (life.team == 1) {
             if (entity.has<Sprite>()) {
                 auto &sprite = entity.get<Sprite>();
                 sprite.r = 255;

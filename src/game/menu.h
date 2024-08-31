@@ -32,6 +32,14 @@ class MenuSystem : public System {
             engine->addEntity(e);
         }
         {
+            auto e = Factory::createButton("fullscreen", []() { Context::get().renderer.toggleFullscreen(); });
+            e->get<Button>().scale = 1.0f;
+            e->get<Button>().alignCenter = true;
+            e->position = {renderer.width / 2, 500};
+            buttons.push_back(e);
+            engine->addEntity(e);
+        }
+        {
             auto e = Factory::createButton("exit", []() { quit = true; });
             e->get<Button>().scale = 1.0f;
             e->get<Button>().alignCenter = true;
@@ -100,6 +108,14 @@ class PauseSystem : public System {
             e->get<Button>().scale = 2.0f;
             e->get<Button>().alignCenter = true;
             e->position = {renderer.width / 2, 350};
+            buttons.push_back(e);
+            engine->addEntity(e);
+        }
+        {
+            auto e = Factory::createButton("fullscreen", []() { Context::get().renderer.toggleFullscreen(); });
+            e->get<Button>().scale = 1.0f;
+            e->get<Button>().alignCenter = true;
+            e->position = {renderer.width / 2, 500};
             buttons.push_back(e);
             engine->addEntity(e);
         }
