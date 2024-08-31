@@ -9,6 +9,10 @@ struct Structure : public Component {
     Entity::Ptr canon;
 };
 
+struct TankFactory : public Component {
+    float timeLeft{0.0f};
+};
+
 class BuildingSystem : public System {
   public:
     StructureType typeToBuild;
@@ -110,5 +114,37 @@ class StructureSystem : public System {
     }
 
     void updateSingle(const float dt, Entity &entity) override {
+    }
+};
+
+class TankFactorySystem : public System {
+  public:
+    TankFactorySystem() {
+        require<Structure>();
+        require<TankFactory>();
+    }
+
+    void onEntityAdded(Entity &entity) override {
+        auto &tf = entity.get<TankFactory>();
+        tf.timeLeft = 10.0f;
+    }
+
+    void onEntityRemoved(Entity &entity) override {
+    }
+
+    void updateSingle(const float dt, Entity &entity) override {
+        auto &tf = entity.get<TankFactory>();
+        auto &life = entity.get<Life>();
+
+        tf.timeLeft -= dt;
+
+        if (tf.timeLeft <= 0.0f) {
+            auto e = Factory::createVehicle(life.team);
+            e->position = entity.position;
+            e->position.y += 64;
+            engine->addEntity(e);
+
+            tf.timeLeft += 10.0f;
+        }
     }
 };

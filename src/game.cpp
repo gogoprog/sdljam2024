@@ -3,6 +3,8 @@
 #include "context.h"
 #include "game/animation.h"
 #include "game/building.h"
+#include "game/bullet.h"
+#include "game/button.h"
 #include "game/camera.h"
 #include "game/control.h"
 #include "game/editor.h"
@@ -15,7 +17,6 @@
 #include "game/sprite.h"
 #include "game/turret.h"
 #include "game/vehicle.h"
-#include "game/button.h"
 
 Game::Game() = default;
 Game::~Game() = default;
@@ -29,6 +30,7 @@ void Game::init() {
     engine.enableSystem<VehicleTargetSystem>();
     engine.enableSystem<WeaponSystem>();
     engine.enableSystem<StructureSystem>();
+    engine.enableSystem<TankFactorySystem>();
     engine.enableSystem<BulletSystem>();
     engine.enableSystem<LifeSystem>();
     engine.enableSystem<MoveSystem>();
@@ -70,7 +72,6 @@ void Game::init() {
                 engine.addEntity(e);
             }
         }
-
 
     {
         engine.setState<MenuSystem>(State::MENU);

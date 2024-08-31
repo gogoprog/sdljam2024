@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../context.h"
+#include "life.h"
 #include "move.h"
 #include "weapon.h"
 

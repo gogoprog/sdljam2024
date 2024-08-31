@@ -18,7 +18,6 @@ class LifeSystem : public System {
     }
 
     void onEntityAdded(Entity &entity) override {
-
         if (entity.get<Life>().team == 1) {
             if (entity.has<Sprite>()) {
                 auto &sprite = entity.get<Sprite>();
@@ -26,6 +25,7 @@ class LifeSystem : public System {
                 sprite.g = 150;
                 sprite.b = 100;
             }
+        } else {
         }
     }
 

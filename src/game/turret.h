@@ -1,9 +1,9 @@
 #pragma once
 
 #include "../context.h"
-#include "bullet.h"
 #include "factory.h"
 #include "sprite.h"
+#include "life.h"
 
 struct TurretStat {
     float interval;

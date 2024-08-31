@@ -17,11 +17,9 @@ class MissionSystem : public System {
         game.stats.money = 10000;
 
         for (int i = 0; i < 10; ++i) {
-            auto e = Factory::createVehicle();
+            auto e = Factory::createVehicle(0);
             e->position.x = 200 + rand() % 200;
             e->position.y = 200 + rand() % 200;
-            e->add<Selectable>();
-            e->get<Life>().team = 0;
             e->name = "playertank" + std::to_string(i);
             engine->addEntity(e);
         }
@@ -37,11 +35,10 @@ class MissionSystem : public System {
                 auto p = level.getTileCoords(pos);
 
                 if (level.isFree(p)) {
-                    auto e = Factory::createVehicle();
+                    auto e = Factory::createVehicle(1);
                     e->name = "computertank" + std::to_string(i);
                     e->position = pos;
 
-                    e->get<Life>().team = 1;
                     engine->addEntity(e);
                     /* e->add<Target>().tileCoords = level.startCoords[1]; */
                 }
@@ -73,7 +70,6 @@ class PlayingSystem : public System {
 
     void update(const float dt) override {
         auto &inputs = Context::get().inputs;
-
 
         if (inputs.isKeyJustPressed(SDL_SCANCODE_ESCAPE)) {
             Context::get().engine.changeState(Game::State::PAUSE);

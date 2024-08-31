@@ -11,7 +11,7 @@ class Factory {
     static Entity::Ptr createBase();
     static Entity::Ptr createTurret();
     static Entity::Ptr createBullet(const Entity &source, float range, float damage);
-    static Entity::Ptr createVehicle();
+    static Entity::Ptr createVehicle(const int team);
     static Entity::Ptr createSpawn();
     static Entity::Ptr createSmallExplosion();
     static Entity::Ptr createExplosion();

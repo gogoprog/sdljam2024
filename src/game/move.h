@@ -3,8 +3,6 @@
 #include <box2d/box2d.h>
 
 #include "../context.h"
-#include "bullet.h"
-#include "factory.h"
 #include "sprite.h"
 
 struct Movable : public Component {

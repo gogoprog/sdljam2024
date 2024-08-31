@@ -3,6 +3,7 @@
 #include "animation.h"
 #include "building.h"
 #include "bullet.h"
+#include "button.h"
 #include "camera.h"
 #include "control.h"
 #include "fx.h"
@@ -12,7 +13,6 @@
 #include "turret.h"
 #include "vehicle.h"
 #include "weapon.h"
-#include "button.h"
 
 const Array<int, 8> turret_frames = {2, 3, 5, 6, 7, 8, 9, 4};
 const Array<int, 8> bullet_frames = {1, 2, 14, 26, 25, 24, 12, 0};
@@ -75,7 +75,7 @@ SharedPtr<Entity> Factory::createBullet(const Entity &source, float range, float
     return e;
 }
 
-SharedPtr<Entity> Factory::createVehicle() {
+SharedPtr<Entity> Factory::createVehicle(const int team) {
     auto e = std::make_shared<Entity>();
     e->add<Vehicle>();
     e->add<Sprite>();
@@ -88,7 +88,11 @@ SharedPtr<Entity> Factory::createVehicle() {
     e->add<Movable>();
     e->add<Hittable>();
     e->get<Hittable>().radius = 20;
-    e->add<Life>();
+    e->add<Life>().team = team;
+
+    if (team == 0) {
+        e->add<Selectable>();
+    }
 
     e->add<Weapon>();
 
@@ -175,12 +179,12 @@ Entity::Ptr Factory::createStructure(const StructureType type) {
             e->add<Animation>();
             e->get<Animation>().frameRate = 15;
             e->get<Animation>().loop = true;
+            e->add<TankFactory>();
         } break;
     }
 
     return e;
 }
-
 
 Entity::Ptr Factory::createButton(const String text, std::function<void()> callback) {
     auto e = std::make_shared<Entity>();
