@@ -31,7 +31,7 @@ class WeaponSystem : public System {
             Context::get().engine.addEntity(e);
             weapon.mustFire = false;
 
-            Context::get().audio.playSound("firing");
+            Context::get().audio.playSound("firing", entity.position);
         }
 
         weapon.timeSinceLastFire += dt;

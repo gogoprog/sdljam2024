@@ -40,6 +40,10 @@ class ControlSystem : public System {
             entity.position.y += dt * speed;
         }
 
+        if (inputs.isKeyPressed(SDL_SCANCODE_F)) {
+            Context::get().audio.playSound("firing", Context::get().getMouseWorldPosition());
+        }
+
         if (inputs.isMouseJustPressed(3)) {
             control.startMousePosition = inputs.getMousePosition();
             control.startPosition = entity.position;

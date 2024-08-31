@@ -12,6 +12,7 @@ class Audio {
 
     void loadSound(const String &name);
     void playSound(const String &name);
+    void playSound(const String &name, const Vector2 &position);
 
   private:
     class Pimpl;

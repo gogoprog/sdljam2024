@@ -46,7 +46,7 @@ class TurretSystem : public System {
             engine->addEntity(e);
             turret.mustFire = false;
 
-            Context::get().audio.playSound("firing");
+            Context::get().audio.playSound("firing", entity.position);
         }
 
         turret.timeSinceLastFire += dt;

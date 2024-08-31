@@ -44,7 +44,7 @@ class LifeSystem : public System {
 
             /* game.stats.money += 20 + 20 * game.waveCount; */
 
-            Context::get().audio.playSound("impact");
+            Context::get().audio.playSound("impact", entity.position);
 
             if (!cameraEntity->has<Shake>()) {
                 cameraEntity->add<Shake>();
