@@ -45,6 +45,7 @@ class ButtonSystem : public System {
 
             if (inputs.isMouseJustPressed(1)) {
                 button.onClick();
+                Context::get().audio.playSound("click");
             }
         }
     }

@@ -11,6 +11,8 @@ class Audio {
     void update();
 
     void loadSound(const String &name);
+    void loadMusic(const String &name);
+    void playMusic();
     void playSound(const String &name);
     void playSound(const String &name, const Vector2 &position);
 

@@ -57,6 +57,8 @@ void Game::init() {
     engine.setState<MissionSystem, HudSystem, BuildingSystem>(State::BUILDING);
 
     engine.changeState(State::MENU);
+
+    Context::get().audio.playMusic();
 }
 
 void Game::reset() {

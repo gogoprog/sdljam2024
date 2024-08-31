@@ -12,6 +12,7 @@ struct Sound {
 
 struct Audio::Pimpl {
     Map<String, Sound> sounds;
+    Mix_Music *music;
 };
 
 Audio::Audio() : pimpl(new Audio::Pimpl()) {
@@ -19,12 +20,14 @@ Audio::Audio() : pimpl(new Audio::Pimpl()) {
 
 Audio::~Audio() = default;
 
+const int channels = 16;
+
 void Audio::init() {
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 
-    Mix_AllocateChannels(16);
+    Mix_AllocateChannels(channels);
 
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < channels; i++) {
         Mix_Volume(i, 80);
     }
 }
@@ -42,13 +45,27 @@ void Audio::loadSound(const String &name) {
     std::cout << "Loaded sound '" << name << "'" << std::endl;
 }
 
+void Audio::loadMusic(const String &name) {
+    std::string path;
+    path = "res/" + name + ".ogg";
+
+    pimpl->music = Mix_LoadMUS(path.c_str());
+
+    std::cout << "Loaded music '" << name << "'" << std::endl;
+}
+
+void Audio::playMusic() {
+    Mix_PlayMusic(pimpl->music, 9999);
+    Mix_VolumeMusic(80);
+}
+
 void Audio::playSound(const String &name) {
     auto &sound = pimpl->sounds[name];
 
     auto channel = Mix_PlayChannel(-1, sound.chunk, 0);
 
     if (channel == -1) {
-        channel = rand() % 16;
+        channel = rand() % channels;
         Mix_PlayChannel(channel, sound.chunk, 0);
     }
 
@@ -62,7 +79,7 @@ void Audio::playSound(const String &name, const Vector2 &position) {
     auto channel = Mix_PlayChannel(-1, sound.chunk, 0);
 
     if (channel == -1) {
-        channel = rand() % 16;
+        channel = rand() % channels;
         Mix_PlayChannel(channel, sound.chunk, 0);
     }
 

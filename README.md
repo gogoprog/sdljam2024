@@ -27,6 +27,8 @@ It has only one dependency : `SDL2` and `SDL_mixer` and `box2d`. Did I say one?
  * https://freesound.org/people/derplayer/sounds/587184/
  * https://freesound.org/people/unfa/sounds/565127/
  * https://freesound.org/people/miksmusic/sounds/497710/
+ * https://freesound.org/people/TheoJT/sounds/511434/
+ * https://freesound.org/people/Pocosebas/sounds/469375/
 
 ### Special thanks
 
