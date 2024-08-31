@@ -5,6 +5,8 @@
 #include "control.h"
 #include "factory.h"
 
+extern bool quit;
+
 class MenuSystem : public System {
   public:
     MenuSystem() {
@@ -26,6 +28,14 @@ class MenuSystem : public System {
             e->get<Button>().scale = 1.0f;
             e->get<Button>().alignCenter = true;
             e->position = {renderer.width / 2, 450};
+            buttons.push_back(e);
+            engine->addEntity(e);
+        }
+        {
+            auto e = Factory::createButton("exit", []() { quit = true; });
+            e->get<Button>().scale = 1.0f;
+            e->get<Button>().alignCenter = true;
+            e->position = {renderer.width / 2, 600};
             buttons.push_back(e);
             engine->addEntity(e);
         }
